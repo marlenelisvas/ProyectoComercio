@@ -5,10 +5,28 @@
  */
 package com.jdbc;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+
 /**
  *
  * @author henry
  */
 public class ConexionJDBC {
+     Connection con;
+    public Connection getCon() {
+        {
+            try {
+                con = DriverManager.getConnection("jdbc:mysql://localhost:3306/app", "root", "");
+                System.out.println("OK");
+            } catch (SQLException e) {
+                System.out.println("Error");
+                throw new RuntimeException(e);
+
+            }
+        }
+        return con;
+    }
     
 }

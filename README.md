@@ -11,6 +11,6 @@ Instalar:
 - XAMPP
 
 Añadir en el proyecto de Netbeans la libreria:
-- MYSQL CONNECTOR
+- [MYSQL CONNECTOR](https://dev.mysql.com/downloads/connector/j/)
 
 
