@@ -2,7 +2,7 @@
 
 ## IDE
 - Netbeans
-
+![imagen](https://github.com/marlenelisvas/ProyectoComercio/blob/main/images/netbeans_vs.png)
 ##Dependencias(Frameworks)
 Instalar:
 - XAMPP
