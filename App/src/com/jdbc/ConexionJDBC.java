@@ -11,14 +11,14 @@ import java.sql.SQLException;
 
 /**
  *
- * @author henry
+ * @author 
  */
 public class ConexionJDBC {
      Connection con;
-    public Connection getCon() {
+    public Connection getConexion() {
         {
             try {
-                con = DriverManager.getConnection("jdbc:mysql://localhost:3306/app", "root", "");
+                con = DriverManager.getConnection("jdbc:mysql://localhost:3306/factura", "root", "");
                 System.out.println("OK");
             } catch (SQLException e) {
                 System.out.println("Error");
