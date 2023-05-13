@@ -9,6 +9,7 @@ import com.jdbc.ConexionJDBC;
 import com.panels.Factura_Importacion;
 import com.panels.Productos;
 import com.panels.Tiles;
+import com.panels.Usuarios;
 import com.utils.Utils;
 import java.awt.Frame;
 import java.sql.ResultSet;
@@ -26,6 +27,7 @@ public class Main extends javax.swing.JFrame {
     Tiles tiles = new Tiles();
     Factura_Importacion factura= new Factura_Importacion();
     Productos productos= new Productos();
+    Usuarios usuarios= new Usuarios();
     Utils util = new Utils();
     /**
      * Creates new form frm_Main
@@ -125,6 +127,20 @@ public class Main extends javax.swing.JFrame {
         jMenuBar1.add(jmenu_productos);
 
         jMenu3.setText("Usuarios");
+        jMenu3.addMenuListener(new javax.swing.event.MenuListener() {
+            public void menuCanceled(javax.swing.event.MenuEvent evt) {
+            }
+            public void menuDeselected(javax.swing.event.MenuEvent evt) {
+            }
+            public void menuSelected(javax.swing.event.MenuEvent evt) {
+                jmenu_usuariosMenuSelected(evt);
+            }
+        });
+        jMenu3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jmenu_usuariosActionPerformed(evt);
+            }
+        });
         jMenuBar1.add(jMenu3);
 
         setJMenuBar(jMenuBar1);
@@ -191,6 +207,18 @@ public class Main extends javax.swing.JFrame {
         this.setVisible(true);
          System.out.println("jmenu_productosActionPerformed");
     }//GEN-LAST:event_jmenu_productosMenuSelected
+
+    private void jmenu_usuariosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jmenu_usuariosActionPerformed
+       this.setContentPane(usuarios);
+        this.setVisible(true);
+         System.out.println("jmenu_usuariosActionPerformed");
+    }//GEN-LAST:event_jmenu_usuariosActionPerformed
+
+    private void jmenu_usuariosMenuSelected(javax.swing.event.MenuEvent evt) {//GEN-FIRST:event_jmenu_usuariosMenuSelected
+         this.setContentPane(usuarios);
+        this.setVisible(true);
+         System.out.println("jmenu_usuariosActionPerformed");
+    }//GEN-LAST:event_jmenu_usuariosMenuSelected
 
     /**
      * @param args the command line arguments

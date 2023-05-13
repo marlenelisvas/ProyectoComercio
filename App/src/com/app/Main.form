@@ -47,6 +47,10 @@
           <Properties>
             <Property name="text" type="java.lang.String" value="Usuarios"/>
           </Properties>
+          <Events>
+            <EventHandler event="menuSelected" listener="javax.swing.event.MenuListener" parameters="javax.swing.event.MenuEvent" handler="jmenu_usuariosMenuSelected"/>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jmenu_usuariosActionPerformed"/>
+          </Events>
         </Menu>
       </SubComponents>
     </Menu>
