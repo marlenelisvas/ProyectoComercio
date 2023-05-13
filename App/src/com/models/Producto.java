@@ -139,7 +139,7 @@ public class Producto {
  
     @Override
     public String toString() {
-        return "\nID_PRODUCTO: " + this.ID_PRODUCTO + "\nDESCRIPCIO: " + this.DESCRIPCION + "\nPRECIO: " + this.PRECIO;
+        return "\nID_PRODUCTO: " + this.ID_PRODUCTO + "\nDESCRIPCION: " + this.DESCRIPCION + "\nPRECIO: " + this.PRECIO;
     }
 }
     
