@@ -5,7 +5,16 @@
  */
 package com.models;
 
+import java.io.IOException;
 import java.util.Date;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import org.apache.poi.xwpf.usermodel.XWPFDocument;
+import org.apache.poi.xwpf.usermodel.XWPFParagraph;
+import org.apache.poi.xwpf.usermodel.XWPFRun;
+import org.json.JSONArray;
+import org.json.JSONObject;
 enum Pago {EFECTIVO,DEBITO,CREDITO, CHEQUE}
 /**
  *
@@ -95,5 +104,46 @@ public class Factura {
     public void setIVA(float IVA) {
         this.IVA = IVA;
     }
+    public void ImprimirFactura(){
+        Template tempImp = new Template();
+        
+        // traer template
+        try {
+            XWPFDocument doc = new XWPFDocument(  tempImp.getTemplate("COD_IMPORT"));
+            
+            
+        } catch (IOException ex) {
+            Logger.getLogger(Factura.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+    }
+    
+    private void replaceParagraphTags(List<XWPFParagraph> paragraphs, JSONArray requestTagsArray) {
+		// To replace Tags in Paragraphs
+		List<XWPFRun> runs;
+		String text;
+		JSONObject tagObject;
+		for (XWPFParagraph p : paragraphs) {
+			runs = p.getRuns();
+			if (runs != null) {
+				for (XWPFRun r : runs) {
+					text = r.getText(0);
+					System.out.println(text);
+					for (int i = 0; i < requestTagsArray.length(); i++) {
+						tagObject = requestTagsArray.getJSONObject(i);
+						if (text != null && text.contains(tagObject.getString("tag"))) {
+							text = text.replace(tagObject.getString("tag"), tagObject.getString("value"));// replacing
+																											// tag
+																											// key
+																											// with
+																											// tag
+																											// value
+							r.setText(text, 0); // setting The text to 'run' in the same document
+						}
+					}
+				}
+			}
+		}
+	}
 }
 

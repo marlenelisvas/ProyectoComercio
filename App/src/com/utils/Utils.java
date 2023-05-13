@@ -4,6 +4,7 @@ package com.utils;
 
 import com.jdbc.ConexionJDBC;
 import com.models.Usuario;
+import java.io.File;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -109,12 +110,11 @@ public class Utils {
                    
                 }
                 _con.getConexion().close();
-             
-                
             } catch (SQLException ex) {
                 throw new RuntimeException(ex);
             }      
             return user;
     }
+    
 
 }
