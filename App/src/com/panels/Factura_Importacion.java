@@ -5,17 +5,28 @@
  */
 package com.panels;
 
+import com.models.Factura;
+import com.models.Usuario;
+import javax.swing.JOptionPane;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
+
+
 /**
  *
  * @author developer
  */
 public class Factura_Importacion extends javax.swing.JPanel {
-
+    private static final Logger log = LogManager.getLogger(Factura_Importacion.class.getName());
+    Factura factura ;
     /**
      * Creates new form Factura
      */
     public Factura_Importacion() {
+        
         initComponents();
+        factura =  new Factura();
     }
 
     /**
@@ -41,9 +52,10 @@ public class Factura_Importacion extends javax.swing.JPanel {
         jLabel5 = new javax.swing.JLabel();
         cb_formas_de_pago = new javax.swing.JComboBox<>();
         jp_footer = new javax.swing.JPanel();
-        jButton2 = new javax.swing.JButton();
+        btn_ImprimirPDF_ = new javax.swing.JButton();
         jButton3 = new javax.swing.JButton();
         jButton1 = new javax.swing.JButton();
+        btn_ImprimirDOC_ = new javax.swing.JButton();
         jp_cliente = new javax.swing.JPanel();
         lbl_section = new javax.swing.JLabel();
         lbl_dni = new javax.swing.JLabel();
@@ -171,7 +183,12 @@ public class Factura_Importacion extends javax.swing.JPanel {
                 .addContainerGap())
         );
 
-        jButton2.setText("IMPRIMIR PDF");
+        btn_ImprimirPDF_.setText("IMPRIMIR PDF");
+        btn_ImprimirPDF_.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_ImprimirPDF_ActionPerformed(evt);
+            }
+        });
 
         jButton3.setText("ELIMINAR");
         jButton3.addActionListener(new java.awt.event.ActionListener() {
@@ -187,26 +204,46 @@ public class Factura_Importacion extends javax.swing.JPanel {
             }
         });
 
+        btn_ImprimirDOC_.setText("IMPRIMIR WORD");
+        btn_ImprimirDOC_.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_ImprimirDOC_ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jp_footerLayout = new javax.swing.GroupLayout(jp_footer);
         jp_footer.setLayout(jp_footerLayout);
         jp_footerLayout.setHorizontalGroup(
             jp_footerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jp_footerLayout.createSequentialGroup()
-                .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 123, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(136, 136, 136)
+                .addComponent(btn_ImprimirPDF_, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
+            .addGroup(jp_footerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jp_footerLayout.createSequentialGroup()
+                    .addContainerGap()
+                    .addComponent(btn_ImprimirDOC_, javax.swing.GroupLayout.PREFERRED_SIZE, 123, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addContainerGap(822, Short.MAX_VALUE)))
         );
         jp_footerLayout.setVerticalGroup(
             jp_footerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jp_footerLayout.createSequentialGroup()
-                .addGroup(jp_footerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jButton2, javax.swing.GroupLayout.DEFAULT_SIZE, 33, Short.MAX_VALUE)
-                    .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jButton3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jp_footerLayout.createSequentialGroup()
+                .addGroup(jp_footerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(jp_footerLayout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(btn_ImprimirPDF_, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(jButton1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 45, Short.MAX_VALUE)
+                    .addComponent(jButton3, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
+            .addGroup(jp_footerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jp_footerLayout.createSequentialGroup()
+                    .addContainerGap()
+                    .addComponent(btn_ImprimirDOC_, javax.swing.GroupLayout.DEFAULT_SIZE, 33, Short.MAX_VALUE)
+                    .addContainerGap()))
         );
 
         lbl_section.setText("Datos del cliente");
@@ -428,7 +465,7 @@ public class Factura_Importacion extends javax.swing.JPanel {
                 .addComponent(jp_empresa, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jp_cliente, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 15, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -460,11 +497,26 @@ public class Factura_Importacion extends javax.swing.JPanel {
         // TODO add your handling code here:
     }//GEN-LAST:event_jButton5ActionPerformed
 
+    private void btn_ImprimirPDF_ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_ImprimirPDF_ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btn_ImprimirPDF_ActionPerformed
+
+    private void btn_ImprimirDOC_ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_ImprimirDOC_ActionPerformed
+       //this.factura.
+       this.factura.setCliente(new Usuario ("77391475v","Marlene", "Vasquez","Los Alayos 2, 1B",""));
+       this.factura.setVendedor(new Usuario ("77391475v","Juan", "Vasquez","Los Alayos 3, 1B",""));
+       System.out.println(this.factura.getCliente().toString());
+        if (!this.factura.ImprimirFacturaImportacion(false))
+            JOptionPane.showMessageDialog(null, "No tiene cargado el template.",
+                "Error", JOptionPane.ERROR_MESSAGE); 
+    }//GEN-LAST:event_btn_ImprimirDOC_ActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btn_ImprimirDOC_;
+    private javax.swing.JButton btn_ImprimirPDF_;
     private javax.swing.JComboBox<String> cb_formas_de_pago;
     private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
     private javax.swing.JButton jButton5;
