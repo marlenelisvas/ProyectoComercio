@@ -6,10 +6,7 @@
 package com.app;
 
 import com.jdbc.ConexionJDBC;
-import com.panels.Factura_Importacion;
-import com.panels.Productos;
-import com.panels.Tiles;
-import com.panels.Usuarios;
+import com.panels.*;
 import com.utils.Utils;
 import java.awt.Frame;
 import java.sql.ResultSet;
@@ -29,6 +26,7 @@ public class Main extends javax.swing.JFrame {
     Productos productos= new Productos();
     Usuarios usuarios= new Usuarios();
     Utils util = new Utils();
+    CargarPantillaImportacion templateImp = new CargarPantillaImportacion();
     /**
      * Creates new form frm_Main
      */
@@ -54,6 +52,9 @@ public class Main extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jMenuBar2 = new javax.swing.JMenuBar();
+        jMenu2 = new javax.swing.JMenu();
+        jMenu4 = new javax.swing.JMenu();
         jButton1 = new javax.swing.JButton();
         jp_principal = new javax.swing.JPanel();
         jMenuBar1 = new javax.swing.JMenuBar();
@@ -64,6 +65,15 @@ public class Main extends javax.swing.JFrame {
         jmItem_salir = new javax.swing.JMenuItem();
         jmenu_productos = new javax.swing.JMenu();
         jMenu3 = new javax.swing.JMenu();
+        jMenu5 = new javax.swing.JMenu();
+        jm_cargarPlantillaExportacion = new javax.swing.JMenuItem();
+        jMenuItem3 = new javax.swing.JMenuItem();
+
+        jMenu2.setText("File");
+        jMenuBar2.add(jMenu2);
+
+        jMenu4.setText("Edit");
+        jMenuBar2.add(jMenu4);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -143,6 +153,21 @@ public class Main extends javax.swing.JFrame {
         });
         jMenuBar1.add(jMenu3);
 
+        jMenu5.setText("Template");
+
+        jm_cargarPlantillaExportacion.setText("Importación");
+        jm_cargarPlantillaExportacion.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jm_cargarPlantillaExportacionActionPerformed(evt);
+            }
+        });
+        jMenu5.add(jm_cargarPlantillaExportacion);
+
+        jMenuItem3.setText("Exportación");
+        jMenu5.add(jMenuItem3);
+
+        jMenuBar1.add(jMenu5);
+
         setJMenuBar(jMenuBar1);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -203,10 +228,16 @@ public class Main extends javax.swing.JFrame {
     }//GEN-LAST:event_jmenu_productosActionPerformed
 
     private void jmenu_productosMenuSelected(javax.swing.event.MenuEvent evt) {//GEN-FIRST:event_jmenu_productosMenuSelected
-        this.setContentPane(productos);
+         this.setContentPane(productos);
+            this.setVisible(true);
+                System.out.println("jmenu_productosMenuSelected");
+    }//GEN-LAST:event_jmenu_productosMenuSelected
+
+    private void jm_cargarPlantillaExportacionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jm_cargarPlantillaExportacionActionPerformed
+     this.setContentPane(templateImp);
         this.setVisible(true);
          System.out.println("jmenu_productosActionPerformed");
-    }//GEN-LAST:event_jmenu_productosMenuSelected
+    }//GEN-LAST:event_jm_cargarPlantillaExportacionActionPerformed
 
     private void jmenu_usuariosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jmenu_usuariosActionPerformed
        this.setContentPane(usuarios);
@@ -217,7 +248,7 @@ public class Main extends javax.swing.JFrame {
     private void jmenu_usuariosMenuSelected(javax.swing.event.MenuEvent evt) {//GEN-FIRST:event_jmenu_usuariosMenuSelected
          this.setContentPane(usuarios);
         this.setVisible(true);
-         System.out.println("jmenu_usuariosActionPerformed");
+         System.out.println("jmenu_usuariosMenuSelected");
     }//GEN-LAST:event_jmenu_usuariosMenuSelected
 
     /**
@@ -259,12 +290,18 @@ public class Main extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
     private javax.swing.JMenu jMenu1;
+    private javax.swing.JMenu jMenu2;
     private javax.swing.JMenu jMenu3;
+    private javax.swing.JMenu jMenu4;
+    private javax.swing.JMenu jMenu5;
     private javax.swing.JMenuBar jMenuBar1;
+    private javax.swing.JMenuBar jMenuBar2;
     private javax.swing.JMenuItem jMenuItem2;
+    private javax.swing.JMenuItem jMenuItem3;
     private javax.swing.JPopupMenu.Separator jSeparator1;
     private javax.swing.JMenuItem jmItem_importacion;
     private javax.swing.JMenuItem jmItem_salir;
+    private javax.swing.JMenuItem jm_cargarPlantillaExportacion;
     private javax.swing.JMenu jmenu_productos;
     private javax.swing.JPanel jp_principal;
     // End of variables declaration//GEN-END:variables
