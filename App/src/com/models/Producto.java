@@ -141,6 +141,10 @@ public class Producto {
     public String toString() {
         return "\nID_PRODUCTO: " + this.ID_PRODUCTO + "\nDESCRIPCION: " + this.DESCRIPCION + "\nPRECIO: " + this.PRECIO;
     }
+    public void imprimir() {
+        System.out.println( "\nID_PRODUCTO: " + this.ID_PRODUCTO + "\nDESCRIPCION: " + this.DESCRIPCION + "\nPRECIO: " + this.PRECIO);
+    }
+    
 }
     
 

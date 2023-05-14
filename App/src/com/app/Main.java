@@ -8,7 +8,6 @@ package com.app;
 import com.jdbc.ConexionJDBC;
 import com.panels.*;
 import com.utils.Utils;
-import java.awt.Frame;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -24,6 +23,7 @@ public class Main extends javax.swing.JFrame {
     ConexionJDBC con;
     Tiles tiles = new Tiles();
     Factura_Importacion factura = new Factura_Importacion();
+    Factura_Exportacion factura_exportacion = new Factura_Exportacion();
     Productos productos = new Productos();
     Usuarios usuarios = new Usuarios();
     Utils util = new Utils();
@@ -40,10 +40,14 @@ public class Main extends javax.swing.JFrame {
         this.setSize(1200, 1000);
         setLocationRelativeTo(null);
         util = new Utils();
-
+           init();
         //   this.setContentPane(tiles);
         //this.jp_principal= new Tiles();
         // this.jp_principal.setVisible(true);
+    }
+    public void init(){
+         this.setContentPane(factura_exportacion);
+        this.setVisible(true);
     }
 
     /**
@@ -63,7 +67,7 @@ public class Main extends javax.swing.JFrame {
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         jmItem_importacion = new javax.swing.JMenuItem();
-        jMenuItem2 = new javax.swing.JMenuItem();
+        jm_factura_Exportacion_ = new javax.swing.JMenuItem();
         jSeparator1 = new javax.swing.JPopupMenu.Separator();
         jmItem_salir = new javax.swing.JMenuItem();
         jmenu_productos = new javax.swing.JMenu();
@@ -108,8 +112,13 @@ public class Main extends javax.swing.JFrame {
         });
         jMenu1.add(jmItem_importacion);
 
-        jMenuItem2.setText("Exportación");
-        jMenu1.add(jMenuItem2);
+        jm_factura_Exportacion_.setText("Exportación");
+        jm_factura_Exportacion_.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jm_factura_Exportacion_ActionPerformed(evt);
+            }
+        });
+        jMenu1.add(jm_factura_Exportacion_);
         jMenu1.add(jSeparator1);
 
         jmItem_salir.setText("Salir");
@@ -254,6 +263,11 @@ public class Main extends javax.swing.JFrame {
         System.out.println("jmenu_usuariosMenuSelected");
     }//GEN-LAST:event_jmenu_usuariosMenuSelected
 
+    private void jm_factura_Exportacion_ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jm_factura_Exportacion_ActionPerformed
+        this.setContentPane(factura_exportacion);
+        this.setVisible(true);
+    }//GEN-LAST:event_jm_factura_Exportacion_ActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -299,12 +313,12 @@ public class Main extends javax.swing.JFrame {
     private javax.swing.JMenu jMenu5;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuBar jMenuBar2;
-    private javax.swing.JMenuItem jMenuItem2;
     private javax.swing.JMenuItem jMenuItem3;
     private javax.swing.JPopupMenu.Separator jSeparator1;
     private javax.swing.JMenuItem jmItem_importacion;
     private javax.swing.JMenuItem jmItem_salir;
     private javax.swing.JMenuItem jm_cargarPlantillaExportacion;
+    private javax.swing.JMenuItem jm_factura_Exportacion_;
     private javax.swing.JMenu jmenu_productos;
     private javax.swing.JPanel jp_principal;
     // End of variables declaration//GEN-END:variables

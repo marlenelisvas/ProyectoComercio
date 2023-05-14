@@ -1,12 +1,16 @@
 package com.models;
 
-import com.panels.Factura_Importacion;
+import com.jdbc.ConexionJDBC;
 import java.io.ByteArrayInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Random;
@@ -30,9 +34,11 @@ import org.apache.xmlbeans.XmlException;
 enum Pago {
     EFECTIVO, DEBITO, CREDITO, CHEQUE
 }
+
 enum Tipo {
     EXPORTACION, IMPORTACION
 }
+
 /**
  *
  * @author Jenny
@@ -44,17 +50,25 @@ public class Factura {
     Tipo tipo_factura;
     Date Fecha;
     Usuario cliente, vendedor;
-    float Base_Imponible;
+    Double Base_Imponible;
     Pago COND_PAGO;
-    float IRPF;
-    float IVA;
+    Double IRPF;
+    Double IVA;
     List<Detalle> detalles;
+    Double total;
+
     public Factura() {
+        this.Fecha =  new Date();
+         this.tipo_factura = Tipo.EXPORTACION;
+        this.Base_Imponible = 0.0;
+        this.COND_PAGO = Pago.EFECTIVO;
+        this.IRPF = 0.0;
+        this.IVA = 0.0;
+        this.detalles = new ArrayList<>();
     }
 
-    public Factura(int Id_factura, Tipo Identificacion, Date Fecha, Usuario cliente, Usuario vendedor, float Base_Imponible, Pago COND_PAGO, float IRPF, float IVA, List<Detalle> detalles) {
+    public Factura(int Id_factura, Tipo tipo_factura, Date Fecha, Usuario cliente, Usuario vendedor, Double Base_Imponible, Pago COND_PAGO, Double IRPF, Double IVA, List<Detalle> detalles) {
         this.Id_factura = Id_factura;
-        this.tipo_factura = Identificacion;
         this.Fecha = Fecha;
         this.cliente = cliente;
         this.vendedor = vendedor;
@@ -63,14 +77,36 @@ public class Factura {
         this.IRPF = IRPF;
         this.IVA = IVA;
         this.detalles = detalles;
+        this.tipo_factura = Tipo.EXPORTACION;
     }
 
     public Tipo getTipo() {
         return tipo_factura;
     }
 
-    public void setTipo(Tipo tipo_factura) {
+    public Tipo getTipo_factura() {
+        return tipo_factura;
+    }
+
+    public void setTipo_factura(Tipo tipo_factura) {
         this.tipo_factura = tipo_factura;
+    }
+
+    public void setIRPF(Double IRPF) {
+        this.IRPF = IRPF;
+    }
+
+    public Double getTotal() {
+        this.total = this.Base_Imponible + ((this.Base_Imponible * this.IVA) + (this.Base_Imponible * this.IRPF));
+        return total;
+    }
+
+    public void setIVA(Double IVA) {
+        this.IVA = IVA;
+    }
+
+    public void setTipo(boolean tipo) {
+        this.tipo_factura = (tipo)?Tipo.IMPORTACION:Tipo.EXPORTACION;
     }
 
     public Usuario getCliente() {
@@ -97,22 +133,12 @@ public class Factura {
         this.Id_factura = Id_factura;
     }
 
-  
-
     public Date getFecha() {
         return Fecha;
     }
 
     public void setFecha(Date Fecha) {
         this.Fecha = Fecha;
-    }
-
-    public float getBase_Imponible() {
-        return Base_Imponible;
-    }
-
-    public void setBase_Imponible(float Base_Imponible) {
-        this.Base_Imponible = Base_Imponible;
     }
 
     public Pago getCOND_PAGO() {
@@ -123,22 +149,6 @@ public class Factura {
         this.COND_PAGO = COND_PAGO;
     }
 
-    public float getIRPF() {
-        return IRPF;
-    }
-
-    public void setIRPF(float IRPF) {
-        this.IRPF = IRPF;
-    }
-
-    public float getIVA() {
-        return IVA;
-    }
-
-    public void setIVA(float IVA) {
-        this.IVA = IVA;
-    }
-
     public List<Detalle> getDetalles() {
         return detalles;
     }
@@ -147,13 +157,111 @@ public class Factura {
         this.detalles = detalles;
     }
 
+    public Double getBase_Imponible() {
+        return Base_Imponible;
+    }
+
+    public void setBase_Imponible(Double Base_Imponible) {
+        this.Base_Imponible = Base_Imponible;
+    }
+
+//=====================================================================
+    public boolean insert() {
+//=====================================================================
+        ConexionJDBC _con = new ConexionJDBC();
+        boolean _res = false;
+        try {
+            String f= this.Fecha.getYear()+"-"+this.Fecha.getMonth()+"-"+this.Fecha.getDay();
+            String q = "INSERT INTO factura (ID_FACTURA ,ID_IMPORTADOR,ID_EXPORTADOR , FECHA, BASE_IMPONIBLE, COND_PAGO, IRPF, IVA, TIPO) VALUES(null,'"
+                    + this.cliente.getDni() + "','" + this.vendedor.getDni() + "','"+new java.sql.Date(this.Fecha.getTime())+"','" + this.Base_Imponible
+                    + "','" + this.COND_PAGO.ordinal() + "','" + this.IRPF + "','" + this.IVA + "','" + this.tipo_factura.ordinal() + "')";
+
+            Statement statement = _con.getConexion().prepareStatement(q);
+            int affectedRows = statement.executeUpdate(q, Statement.RETURN_GENERATED_KEYS);
+            if (affectedRows == 0) {
+                throw new SQLException("No se pudo guardar");
+            }
+
+            ResultSet generatedKeys = statement.getGeneratedKeys();
+            if (generatedKeys.next()) {
+                this.Id_factura = generatedKeys.getInt(1);
+            }
+            _res = true;
+            _con.getConexion().close();
+        } catch (SQLException ex) {
+
+            throw new RuntimeException(ex);
+
+        }
+        return _res;
+    }
+//=====================================================================
+    public boolean update() {
+//=====================================================================
+         ConexionJDBC _con = new ConexionJDBC();
+        boolean _res = false;
+        String f= this.Fecha.getYear()+"-"+this.Fecha.getMonth()+"-"+this.Fecha.getDay();
+                try {
+            Statement query = _con.getConexion().createStatement();
+            //ResultSet no vale para el insert y executeQuery no sirve para actualizar base de datos
+            //ID_FACTURA ,ID_IMPORTADOR,ID_EXPORTADOR , FECHA, BASE_IMPONIBLE, COND_PAGO, IRPF, IVA, TIPO
+            // date año,mes,día '1995-01-29'
+            int res = query.executeUpdate("UPDATE  factura SET FECHA ='"+ 
+                   new java.sql.Date(this.Fecha.getTime()) +"', BASE_IMPONIBLE= "+this.Base_Imponible + ",IRPF="+this.IRPF+",IVA="+this.IVA+", TIPO='"+ this.tipo_factura.ordinal()+"' WHERE ID_FACTURA="+this.Id_factura);
+            
+            _res = true;
+            _con.getConexion().close();
+        } catch (SQLException ex) {
+        
+            throw new RuntimeException(ex.getMessage());
+        }
+        return _res;
+    }
+    public boolean cargarDetalles() {
+        boolean _res = false;
+        if (this.Id_factura > 0) {
+
+            ConexionJDBC _con = new ConexionJDBC();
+            this.Base_Imponible = 0.0;
+            try {
+                Statement query = _con.getConexion().createStatement();
+                ResultSet res = query.executeQuery("Select * from detalles where ID_FACTURA='" + this.Id_factura + "'");
+                this.detalles = new ArrayList<>();
+                while (res.next()) {
+                    //int ID_DETALLE, Factura FACTURA, Producto PRODUCTO, int UNIDADES, double TOTAL
+                    Detalle aux = new Detalle();
+                    aux.setID_DETALLE(res.getInt("ID_DETALLES"));
+                    aux.setFACTURA(this);
+
+                    Producto x = new Producto();
+                    x.consultar(res.getInt("ID_PRODUCTO"));
+                    aux.setPRODUCTO(x);
+
+                    aux.setUNIDADES(res.getInt("UNIDADES"));
+                    aux.setTOTAL(res.getDouble("TOTAL"));
+                    this.Base_Imponible += aux.getTOTAL();
+                    aux.imprimir();
+                    this.detalles.add(aux);
+                }
+
+                _res = true;
+                _con.getConexion().close();
+            } catch (SQLException ex) {
+
+                throw new RuntimeException(ex);
+
+            }
+        }
+        return _res;
+    }
+
     public boolean ImprimirFacturaImportacion(boolean inPDF) {
         boolean resp = false;
         Template tempImp = new Template();
         tempImp.setId("COD_IMPORT");
         // traer template
         try {
-           
+
             InputStream in = tempImp.getTemplate("COD_IMPORT");
             Random random = new Random(); // to generate a random fileName
             int randomNumber = random.nextInt(987656554);
@@ -168,15 +276,14 @@ public class Factura {
                     IOUtils.copy(convertedInputStream, new FileOutputStream("Factura" + randomNumber + ".docx"));
                     resp = true;
                 }
-            }
-            else {
+            } else {
                 //PdfOptions options = PdfOptions.create().fontEncoding("windows-1250");
-               // PdfConverter.getInstance().convert(doc, fileOutputStream, options);
+                // PdfConverter.getInstance().convert(doc, fileOutputStream, options);
                 byte[] encoded = Files.readAllBytes(Paths.get("GeneratedDoc_" + randomNumber)); // reading the file*/
-         
+
                 InputStream convertedInputStream = new ByteArrayInputStream(encoded);
                 IOUtils.copy(convertedInputStream, new FileOutputStream("Factura" + randomNumber + ".pdf"));
-             }
+            }
             //response.flushBuffer();
         } catch (IOException ex) {
             throw new RuntimeException(ex);
@@ -201,31 +308,61 @@ public class Factura {
         objToPlace.put("tag", "@{id_cliente}");
         objToPlace.put("value", cliente.getDni());
         tagsArray.put(objToPlace);
-        
+
         objToPlace = new JSONObject();
         objToPlace.put("tag", "@{nombre_cliente}");
-        objToPlace.put("value", this.cliente.getNombre()+" "+ this.cliente.getApellidos());
+        objToPlace.put("value", this.cliente.getNombre() + " " + this.cliente.getApellidos());
         tagsArray.put(objToPlace);
-        
-         objToPlace = new JSONObject();         
+
+        objToPlace = new JSONObject();
         objToPlace.put("tag", "@{direccion_cliente}");
         objToPlace.put("value", this.cliente.getDireccion1());
         tagsArray.put(objToPlace);
-        
-        
+
         // vendedor
-         objToPlace = new JSONObject();
+        objToPlace = new JSONObject();
         objToPlace.put("tag", "@{id_vendedor}");
         objToPlace.put("value", cliente.getDni());
         tagsArray.put(objToPlace);
-        
+
         objToPlace = new JSONObject();
         objToPlace.put("tag", "@{nombre_vendedor}");
-        objToPlace.put("value", this.vendedor.getNombre()+" "+ this.vendedor.getApellidos());
+        objToPlace.put("value", this.vendedor.getNombre() + " " + this.vendedor.getApellidos());
         tagsArray.put(objToPlace);
-         objToPlace = new JSONObject();
+
+        objToPlace = new JSONObject();
         objToPlace.put("tag", "@{direccion_vendedor}");
         objToPlace.put("value", this.vendedor.getDireccion1());
+        tagsArray.put(objToPlace);
+
+        objToPlace = new JSONObject();
+        objToPlace.put("tag", "@{id_factura}");
+        objToPlace.put("value", this.Id_factura+"");
+        tagsArray.put(objToPlace);
+
+        objToPlace = new JSONObject();
+        objToPlace.put("tag", "@{base}");
+        objToPlace.put("value", this.Base_Imponible+"");
+        tagsArray.put(objToPlace);
+
+        objToPlace = new JSONObject();
+        objToPlace.put("tag", "@{descuento}");
+        objToPlace.put("value", this.IRPF+"");
+        tagsArray.put(objToPlace);
+
+        objToPlace = new JSONObject();
+        objToPlace.put("tag", "@{iva}");
+        objToPlace.put("value", this.IVA+"");
+        tagsArray.put(objToPlace);
+
+        objToPlace = new JSONObject();
+        objToPlace.put("tag", "@{total}");
+        objToPlace.put("value", this.total+"");
+        tagsArray.put(objToPlace);
+        
+        objToPlace = new JSONObject();
+        objToPlace.put("tag", "@{fecha}");
+        objToPlace.put("value", new java.sql.Date(this.Fecha.getTime())+"");
         tagsArray.put(objToPlace);
         return tagsArray;
     }
@@ -278,11 +415,12 @@ public class Factura {
             }
         }
     }
-    public static void createTable(XWPFDocument doc){
+
+    public static void createTable(XWPFDocument doc) {
         XWPFTable table = doc.createTable(10, 4);
-        int i=0;
+        int i = 0;
         table.getRow(i).getCell(0).setText("sdfsdf");
-        
+
     }
 
     private void replaceHeaderFooterTags(XWPFDocument doc, JSONArray requestTagsArray)
@@ -317,6 +455,27 @@ public class Factura {
                 replaceParagraphTags(footer.getParagraphs(), requestTagsArray);
                 replaceTableTags(footer.getTables(), requestTagsArray);
             }
+        }
+    }
+
+    public void imprimir() {
+        //ID_FACTURA ,ID_IMPORTADOR,ID_EXPORTADOR , FECHA, BASE_IMPONIBLE, COND_PAGO, IRPF, IVA, TIPO
+        System.out.println("====================================\n"
+                + "ID FACTURA: " + this.Id_factura + 
+                "\n ID_IMPORTADOR: "+( (this.cliente != null)? this.cliente.getDni(): "")+
+                "\n ID_EXPORTADOR: "+ ( (this.vendedor != null)? this.vendedor.getDni(): "")+
+                "\n FECHA: "+this.Fecha+
+                 "\n BASE_IMPONIBLE: "+this.Base_Imponible+
+                "\n COND_PAGO: "+this.COND_PAGO+
+                "\n IRPF: "+this.IRPF+
+                "\n IVA: "+this.IVA+
+                "\n TIPO: "+this.tipo_factura+                
+                "\n================================");
+    }
+
+    public void imprimirDetalles() {
+        for (int i = 0; i < this.detalles.size(); i++) {
+            this.detalles.get(i).imprimir();
         }
     }
 }
