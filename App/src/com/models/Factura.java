@@ -153,7 +153,7 @@ public class Factura {
         tempImp.setId("COD_IMPORT");
         // traer template
         try {
-            System.out.println(tempImp.toString());
+           
             InputStream in = tempImp.getTemplate("COD_IMPORT");
             Random random = new Random(); // to generate a random fileName
             int randomNumber = random.nextInt(987656554);

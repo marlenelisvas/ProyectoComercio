@@ -17,30 +17,33 @@ import java.util.logging.Logger;
 
 /**
  *
- * @author 
+ * @author
  */
 public class Main extends javax.swing.JFrame {
+
     ConexionJDBC con;
     Tiles tiles = new Tiles();
-    Factura_Importacion factura= new Factura_Importacion();
-    Productos productos= new Productos();
-    Usuarios usuarios= new Usuarios();
+    Factura_Importacion factura = new Factura_Importacion();
+    Productos productos = new Productos();
+    Usuarios usuarios = new Usuarios();
     Utils util = new Utils();
     CargarPantillaImportacion templateImp = new CargarPantillaImportacion();
+
     /**
      * Creates new form frm_Main
      */
     public Main() {
         initComponents();
-        setBounds(100,100,450,300);
-       setTitle("Sistema de Gestión de Facturas");
-       this.setExtendedState(Frame.MAXIMIZED_BOTH);
-        util =  new Utils();
-        
-        this.setContentPane(tiles);
-   
+        setBounds(100, 100, 450, 300);
+        setTitle("Sistema de Gestión de Facturas");
+        //   this.setExtendedState(Frame.MAXIMIZED_BOTH);
+        this.setSize(1200, 1000);
+        setLocationRelativeTo(null);
+        util = new Utils();
+
+        //   this.setContentPane(tiles);
         //this.jp_principal= new Tiles();
-       // this.jp_principal.setVisible(true);
+        // this.jp_principal.setVisible(true);
     }
 
     /**
@@ -191,20 +194,20 @@ public class Main extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-         con = new ConexionJDBC();
-        String dni= "77391475V";
-        System.out.println("Event: "+evt.toString()) ;
-       try {
-                Statement query = con.getConexion().createStatement();
-                ResultSet res = query.executeQuery("Select * from usuario where DNI='"+dni+"'");
-                
-                while (res.next()){
-                    System.out.println(res.getString("DNI"));
-                }
+        con = new ConexionJDBC();
+        String dni = "77391475V";
+        System.out.println("Event: " + evt.toString());
+        try {
+            Statement query = con.getConexion().createStatement();
+            ResultSet res = query.executeQuery("Select * from usuario where DNI='" + dni + "'");
 
-            } catch (SQLException ex) {
-                throw new RuntimeException(ex);
+            while (res.next()) {
+                System.out.println(res.getString("DNI"));
             }
+
+        } catch (SQLException ex) {
+            throw new RuntimeException(ex);
+        }
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jmItem_salirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jmItem_salirActionPerformed
@@ -216,7 +219,7 @@ public class Main extends javax.swing.JFrame {
     }//GEN-LAST:event_jmItem_salirActionPerformed
 
     private void jmItem_importacionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jmItem_importacionActionPerformed
-      System.out.println("jmItem_importacionActionPerformed");
+        System.out.println("jmItem_importacionActionPerformed");
         this.setContentPane(factura);
         this.setVisible(true);
     }//GEN-LAST:event_jmItem_importacionActionPerformed
@@ -224,31 +227,31 @@ public class Main extends javax.swing.JFrame {
     private void jmenu_productosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jmenu_productosActionPerformed
         this.setContentPane(productos);
         this.setVisible(true);
-         System.out.println("jmenu_productosActionPerformed");
+        System.out.println("jmenu_productosActionPerformed");
     }//GEN-LAST:event_jmenu_productosActionPerformed
 
     private void jmenu_productosMenuSelected(javax.swing.event.MenuEvent evt) {//GEN-FIRST:event_jmenu_productosMenuSelected
-         this.setContentPane(productos);
-            this.setVisible(true);
-                System.out.println("jmenu_productosMenuSelected");
+        this.setContentPane(productos);
+        this.setVisible(true);
+        System.out.println("jmenu_productosMenuSelected");
     }//GEN-LAST:event_jmenu_productosMenuSelected
 
     private void jm_cargarPlantillaExportacionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jm_cargarPlantillaExportacionActionPerformed
-     this.setContentPane(templateImp);
+        this.setContentPane(templateImp);
         this.setVisible(true);
-         System.out.println("jmenu_productosActionPerformed");
+        System.out.println("jmenu_productosActionPerformed");
     }//GEN-LAST:event_jm_cargarPlantillaExportacionActionPerformed
 
     private void jmenu_usuariosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jmenu_usuariosActionPerformed
-       this.setContentPane(usuarios);
+        this.setContentPane(usuarios);
         this.setVisible(true);
-         System.out.println("jmenu_usuariosActionPerformed");
+        System.out.println("jmenu_usuariosActionPerformed");
     }//GEN-LAST:event_jmenu_usuariosActionPerformed
 
     private void jmenu_usuariosMenuSelected(javax.swing.event.MenuEvent evt) {//GEN-FIRST:event_jmenu_usuariosMenuSelected
-         this.setContentPane(usuarios);
+        this.setContentPane(usuarios);
         this.setVisible(true);
-         System.out.println("jmenu_usuariosMenuSelected");
+        System.out.println("jmenu_usuariosMenuSelected");
     }//GEN-LAST:event_jmenu_usuariosMenuSelected
 
     /**
