@@ -1,8 +1,11 @@
 
 package com.panels;
 
+import com.models.Detalle;
 import com.models.Factura;
+import com.models.Producto;
 import com.models.Usuario;
+import java.util.List;
 import javax.swing.JOptionPane;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -16,6 +19,10 @@ import org.apache.logging.log4j.Logger;
 public class Factura_Importacion extends javax.swing.JPanel {
     private static final Logger log = LogManager.getLogger(Factura_Importacion.class.getName());
     Factura factura ;
+    Usuario cliente, vendedor;
+    List<Producto> productos;
+    List<Detalle> detalles;
+    
     /**
      * Creates new form Factura
      */
@@ -24,7 +31,9 @@ public class Factura_Importacion extends javax.swing.JPanel {
         initComponents();
         factura =  new Factura();
     }
-
+    public void calcularTotal(){
+    
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always

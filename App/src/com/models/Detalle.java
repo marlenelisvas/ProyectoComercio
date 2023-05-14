@@ -11,15 +11,41 @@ package com.models;
  */
 public class Detalle {
     int ID_DETALLE;
-    int ID_FACTURA;
-    int ID_PRODUCTO;
+    Factura FACTURA;
+    Producto PRODUCTO;
+    int UNIDADES;
+    double TOTAL;
 
-    public Detalle(int ID_DETALLE, int ID_FACTURA, int ID_PRODUCTO) {
+    public Detalle(int ID_DETALLE, Factura FACTURA, Producto PRODUCTO, int UNIDADES, double TOTAL) {
         this.ID_DETALLE = ID_DETALLE;
-        this.ID_FACTURA = ID_FACTURA;
-        this.ID_PRODUCTO = ID_PRODUCTO;
+        this.FACTURA = FACTURA;
+        this.PRODUCTO = PRODUCTO;
+        this.UNIDADES = UNIDADES;
+        this.TOTAL = TOTAL;
     }
 
+    
+    public Detalle() {
+    }
+
+    public int getUNIDADES() {
+        return UNIDADES;
+    }
+
+    public void setUNIDADES(int UNIDADES) {
+        this.UNIDADES = UNIDADES;
+    }
+
+    public double getTOTAL() {
+        
+        return this.PRODUCTO.getPRECIO()*this.UNIDADES;
+    }
+
+    public void setTOTAL(int TOTAL) {
+        this.TOTAL = TOTAL;
+    }
+
+ 
     public int getID_DETALLE() {
         return ID_DETALLE;
     }
@@ -28,21 +54,4 @@ public class Detalle {
         this.ID_DETALLE = ID_DETALLE;
     }
 
-    public int getID_FACTURA() {
-        return ID_FACTURA;
-    }
-
-    public void setID_FACTURA(int ID_FACTURA) {
-        this.ID_FACTURA = ID_FACTURA;
-    }
-
-    public int getID_PRODUCTO() {
-        return ID_PRODUCTO;
-    }
-
-    public void setID_PRODUCTO(int ID_PRODUCTO) {
-        this.ID_PRODUCTO = ID_PRODUCTO;
-    }
-
-    
 }

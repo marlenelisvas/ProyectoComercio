@@ -30,7 +30,9 @@ import org.apache.xmlbeans.XmlException;
 enum Pago {
     EFECTIVO, DEBITO, CREDITO, CHEQUE
 }
-
+enum Tipo {
+    EXPORTACION, IMPORTACION
+}
 /**
  *
  * @author Jenny
@@ -39,27 +41,36 @@ public class Factura {
 
     private static final Logger log = LogManager.getLogger(Factura.class.getName());
     int Id_factura;
-    int Id_Importacion;
-    int Id_Exportacion;
+    Tipo tipo_factura;
     Date Fecha;
     Usuario cliente, vendedor;
     float Base_Imponible;
     Pago COND_PAGO;
     float IRPF;
     float IVA;
-
+    List<Detalle> detalles;
     public Factura() {
     }
 
-    public Factura(int Id_factura, int Id_Importacion, int Id_Exportacion, Date Fecha, float Base_Imponible, Pago COND_PAGO, float IRPF, float IVA) {
+    public Factura(int Id_factura, Tipo Identificacion, Date Fecha, Usuario cliente, Usuario vendedor, float Base_Imponible, Pago COND_PAGO, float IRPF, float IVA, List<Detalle> detalles) {
         this.Id_factura = Id_factura;
-        this.Id_Importacion = Id_Importacion;
-        this.Id_Exportacion = Id_Exportacion;
+        this.tipo_factura = Identificacion;
         this.Fecha = Fecha;
+        this.cliente = cliente;
+        this.vendedor = vendedor;
         this.Base_Imponible = Base_Imponible;
         this.COND_PAGO = COND_PAGO;
         this.IRPF = IRPF;
         this.IVA = IVA;
+        this.detalles = detalles;
+    }
+
+    public Tipo getTipo() {
+        return tipo_factura;
+    }
+
+    public void setTipo(Tipo tipo_factura) {
+        this.tipo_factura = tipo_factura;
     }
 
     public Usuario getCliente() {
@@ -86,21 +97,7 @@ public class Factura {
         this.Id_factura = Id_factura;
     }
 
-    public int getId_Importacion() {
-        return Id_Importacion;
-    }
-
-    public void setId_Importacion(int Id_Importacion) {
-        this.Id_Importacion = Id_Importacion;
-    }
-
-    public int getId_Exportacion() {
-        return Id_Exportacion;
-    }
-
-    public void setId_Exportacion(int Id_Exportacion) {
-        this.Id_Exportacion = Id_Exportacion;
-    }
+  
 
     public Date getFecha() {
         return Fecha;
@@ -140,6 +137,14 @@ public class Factura {
 
     public void setIVA(float IVA) {
         this.IVA = IVA;
+    }
+
+    public List<Detalle> getDetalles() {
+        return detalles;
+    }
+
+    public void setDetalles(List<Detalle> detalles) {
+        this.detalles = detalles;
     }
 
     public boolean ImprimirFacturaImportacion(boolean inPDF) {
