@@ -78,18 +78,21 @@
             <Property name="text" type="java.lang.String" value="Template"/>
           </Properties>
           <SubComponents>
-            <MenuItem class="javax.swing.JMenuItem" name="jm_cargarPlantillaExportacion">
+            <MenuItem class="javax.swing.JMenuItem" name="jm_cargarPlantillaImportacion_">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Importaci&#xf3;n"/>
               </Properties>
               <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jm_cargarPlantillaExportacionActionPerformed"/>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jm_cargarPlantillaImportacion_ActionPerformed"/>
               </Events>
             </MenuItem>
-            <MenuItem class="javax.swing.JMenuItem" name="jMenuItem3">
+            <MenuItem class="javax.swing.JMenuItem" name="cargarPlantillaExportacion">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Exportaci&#xf3;n"/>
               </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="cargarPlantillaExportacionActionPerformed"/>
+              </Events>
             </MenuItem>
           </SubComponents>
         </Menu>

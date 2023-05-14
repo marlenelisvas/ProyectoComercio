@@ -743,7 +743,7 @@ public class Factura_Importacion extends javax.swing.JPanel {
         this.factura.setCliente(this.cliente);
         this.factura.setVendedor(this.vendedor);
         System.out.println(this.factura.getCliente().toString());
-        if (!this.factura.ImprimirFacturaImportacion(false)) {
+        if (!this.factura.ImprimirFactura(false)) {
             JOptionPane.showMessageDialog(null, "No tiene cargado el template.",
                     "Error", JOptionPane.ERROR_MESSAGE);
         }

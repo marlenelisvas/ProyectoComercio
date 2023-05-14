@@ -23,6 +23,8 @@ import org.json.JSONObject;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.poi.util.IOUtils;
+import org.apache.poi.xwpf.converter.pdf.PdfConverter;
+import org.apache.poi.xwpf.converter.pdf.PdfOptions;
 import org.apache.poi.xwpf.model.XWPFHeaderFooterPolicy;
 import org.apache.poi.xwpf.usermodel.XWPFFooter;
 import org.apache.poi.xwpf.usermodel.XWPFHeader;
@@ -58,8 +60,8 @@ public class Factura {
     Double total;
 
     public Factura() {
-        this.Fecha =  new Date();
-         this.tipo_factura = Tipo.EXPORTACION;
+        this.Fecha = new Date();
+        this.tipo_factura = Tipo.EXPORTACION;
         this.Base_Imponible = 0.0;
         this.COND_PAGO = Pago.EFECTIVO;
         this.IRPF = 0.0;
@@ -106,7 +108,7 @@ public class Factura {
     }
 
     public void setTipo(boolean tipo) {
-        this.tipo_factura = (tipo)?Tipo.IMPORTACION:Tipo.EXPORTACION;
+        this.tipo_factura = (tipo) ? Tipo.IMPORTACION : Tipo.EXPORTACION;
     }
 
     public Usuario getCliente() {
@@ -171,9 +173,9 @@ public class Factura {
         ConexionJDBC _con = new ConexionJDBC();
         boolean _res = false;
         try {
-            String f= this.Fecha.getYear()+"-"+this.Fecha.getMonth()+"-"+this.Fecha.getDay();
+            String f = this.Fecha.getYear() + "-" + this.Fecha.getMonth() + "-" + this.Fecha.getDay();
             String q = "INSERT INTO factura (ID_FACTURA ,ID_IMPORTADOR,ID_EXPORTADOR , FECHA, BASE_IMPONIBLE, COND_PAGO, IRPF, IVA, TIPO) VALUES(null,'"
-                    + this.cliente.getDni() + "','" + this.vendedor.getDni() + "','"+new java.sql.Date(this.Fecha.getTime())+"','" + this.Base_Imponible
+                    + this.cliente.getDni() + "','" + this.vendedor.getDni() + "','" + new java.sql.Date(this.Fecha.getTime()) + "','" + this.Base_Imponible
                     + "','" + this.COND_PAGO.ordinal() + "','" + this.IRPF + "','" + this.IVA + "','" + this.tipo_factura.ordinal() + "')";
 
             Statement statement = _con.getConexion().prepareStatement(q);
@@ -196,27 +198,29 @@ public class Factura {
         return _res;
     }
 //=====================================================================
+
     public boolean update() {
 //=====================================================================
-         ConexionJDBC _con = new ConexionJDBC();
+        ConexionJDBC _con = new ConexionJDBC();
         boolean _res = false;
-        String f= this.Fecha.getYear()+"-"+this.Fecha.getMonth()+"-"+this.Fecha.getDay();
-                try {
+        String f = this.Fecha.getYear() + "-" + this.Fecha.getMonth() + "-" + this.Fecha.getDay();
+        try {
             Statement query = _con.getConexion().createStatement();
             //ResultSet no vale para el insert y executeQuery no sirve para actualizar base de datos
             //ID_FACTURA ,ID_IMPORTADOR,ID_EXPORTADOR , FECHA, BASE_IMPONIBLE, COND_PAGO, IRPF, IVA, TIPO
             // date año,mes,día '1995-01-29'
-            int res = query.executeUpdate("UPDATE  factura SET FECHA ='"+ 
-                   new java.sql.Date(this.Fecha.getTime()) +"', BASE_IMPONIBLE= "+this.Base_Imponible + ",IRPF="+this.IRPF+",IVA="+this.IVA+", TIPO='"+ this.tipo_factura.ordinal()+"' WHERE ID_FACTURA="+this.Id_factura);
-            
+            int res = query.executeUpdate("UPDATE  factura SET FECHA ='"
+                    + new java.sql.Date(this.Fecha.getTime()) + "', BASE_IMPONIBLE= " + this.Base_Imponible + ",IRPF=" + this.IRPF + ",IVA=" + this.IVA + ", TIPO='" + this.tipo_factura.ordinal() + "' WHERE ID_FACTURA=" + this.Id_factura);
+
             _res = true;
             _con.getConexion().close();
         } catch (SQLException ex) {
-        
+
             throw new RuntimeException(ex.getMessage());
         }
         return _res;
     }
+
     public boolean cargarDetalles() {
         boolean _res = false;
         if (this.Id_factura > 0) {
@@ -255,34 +259,39 @@ public class Factura {
         return _res;
     }
 
-    public boolean ImprimirFacturaImportacion(boolean inPDF) {
+    public boolean ImprimirFactura(boolean inPDF) {
         boolean resp = false;
+        String tipo = "COD_EXPORT";
         Template tempImp = new Template();
-        tempImp.setId("COD_IMPORT");
+        if (this.tipo_factura == Tipo.IMPORTACION) {
+            tipo = "COD_IMPORT";
+        }
+
+        tempImp.setId(tipo);
         // traer template
         try {
 
-            InputStream in = tempImp.getTemplate("COD_IMPORT");
+            InputStream in = tempImp.getTemplate(tipo);
             Random random = new Random(); // to generate a random fileName
             int randomNumber = random.nextInt(987656554);
             if (in != null) {
                 XWPFDocument doc = new XWPFDocument(in);
                 this.replaceTags(doc, this.getTags()); // Replace Tags in the doc
-                FileOutputStream fileOutputStream = new FileOutputStream("Factura" + randomNumber); // Temp location
+                FileOutputStream fileOutputStream = new FileOutputStream("Factura_" + randomNumber); // Temp location
                 if (!inPDF) {
                     doc.write(fileOutputStream);// writing the updated Template to FileOutputStream // to save file
-                    byte[] encoded = Files.readAllBytes(Paths.get("Factura" + randomNumber)); // reading the file
+                    byte[] encoded = Files.readAllBytes(Paths.get("Factura_" + randomNumber)); // reading the file
                     InputStream convertedInputStream = new ByteArrayInputStream(encoded);
-                    IOUtils.copy(convertedInputStream, new FileOutputStream("Factura" + randomNumber + ".docx"));
+                    IOUtils.copy(convertedInputStream, new FileOutputStream("Factura_" + randomNumber + ".docx"));
                     resp = true;
-                }
-            } else {
-                //PdfOptions options = PdfOptions.create().fontEncoding("windows-1250");
-                // PdfConverter.getInstance().convert(doc, fileOutputStream, options);
-                byte[] encoded = Files.readAllBytes(Paths.get("GeneratedDoc_" + randomNumber)); // reading the file*/
+                } else {
+                  //  PdfOptions options = PdfOptions.create().fontEncoding("windows-1250");
+                   // PdfConverter..getInstance().convert(doc, fileOutputStream, options);
+                    byte[] encoded = Files.readAllBytes(Paths.get("GeneratedDoc_" + randomNumber)); // reading the file*/
 
-                InputStream convertedInputStream = new ByteArrayInputStream(encoded);
-                IOUtils.copy(convertedInputStream, new FileOutputStream("Factura" + randomNumber + ".pdf"));
+                    InputStream convertedInputStream = new ByteArrayInputStream(encoded);
+                    IOUtils.copy(convertedInputStream, new FileOutputStream("Factura" + randomNumber + ".pdf"));
+                }
             }
             //response.flushBuffer();
         } catch (IOException ex) {
@@ -337,32 +346,32 @@ public class Factura {
 
         objToPlace = new JSONObject();
         objToPlace.put("tag", "@{id_factura}");
-        objToPlace.put("value", this.Id_factura+"");
+        objToPlace.put("value", this.Id_factura + "");
         tagsArray.put(objToPlace);
 
         objToPlace = new JSONObject();
         objToPlace.put("tag", "@{base}");
-        objToPlace.put("value", this.Base_Imponible+"");
+        objToPlace.put("value", this.Base_Imponible + "");
         tagsArray.put(objToPlace);
 
         objToPlace = new JSONObject();
         objToPlace.put("tag", "@{descuento}");
-        objToPlace.put("value", this.IRPF+"");
+        objToPlace.put("value", this.IRPF + "");
         tagsArray.put(objToPlace);
 
         objToPlace = new JSONObject();
         objToPlace.put("tag", "@{iva}");
-        objToPlace.put("value", this.IVA+"");
+        objToPlace.put("value", this.IVA + "");
         tagsArray.put(objToPlace);
 
         objToPlace = new JSONObject();
         objToPlace.put("tag", "@{total}");
-        objToPlace.put("value", this.total+"");
+        objToPlace.put("value", this.total + "");
         tagsArray.put(objToPlace);
-        
+
         objToPlace = new JSONObject();
         objToPlace.put("tag", "@{fecha}");
-        objToPlace.put("value", new java.sql.Date(this.Fecha.getTime())+"");
+        objToPlace.put("value", new java.sql.Date(this.Fecha.getTime()) + "");
         tagsArray.put(objToPlace);
         return tagsArray;
     }
@@ -461,16 +470,16 @@ public class Factura {
     public void imprimir() {
         //ID_FACTURA ,ID_IMPORTADOR,ID_EXPORTADOR , FECHA, BASE_IMPONIBLE, COND_PAGO, IRPF, IVA, TIPO
         System.out.println("====================================\n"
-                + "ID FACTURA: " + this.Id_factura + 
-                "\n ID_IMPORTADOR: "+( (this.cliente != null)? this.cliente.getDni(): "")+
-                "\n ID_EXPORTADOR: "+ ( (this.vendedor != null)? this.vendedor.getDni(): "")+
-                "\n FECHA: "+this.Fecha+
-                 "\n BASE_IMPONIBLE: "+this.Base_Imponible+
-                "\n COND_PAGO: "+this.COND_PAGO+
-                "\n IRPF: "+this.IRPF+
-                "\n IVA: "+this.IVA+
-                "\n TIPO: "+this.tipo_factura+                
-                "\n================================");
+                + "ID FACTURA: " + this.Id_factura
+                + "\n ID_IMPORTADOR: " + ((this.cliente != null) ? this.cliente.getDni() : "")
+                + "\n ID_EXPORTADOR: " + ((this.vendedor != null) ? this.vendedor.getDni() : "")
+                + "\n FECHA: " + this.Fecha
+                + "\n BASE_IMPONIBLE: " + this.Base_Imponible
+                + "\n COND_PAGO: " + this.COND_PAGO
+                + "\n IRPF: " + this.IRPF
+                + "\n IVA: " + this.IVA
+                + "\n TIPO: " + this.tipo_factura
+                + "\n================================");
     }
 
     public void imprimirDetalles() {

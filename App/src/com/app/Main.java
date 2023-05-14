@@ -28,6 +28,7 @@ public class Main extends javax.swing.JFrame {
     Usuarios usuarios = new Usuarios();
     Utils util = new Utils();
     CargarPantillaImportacion templateImp = new CargarPantillaImportacion();
+    CargarPantillaExportacion templateExp = new CargarPantillaExportacion();
 
     /**
      * Creates new form frm_Main
@@ -40,13 +41,14 @@ public class Main extends javax.swing.JFrame {
         this.setSize(1200, 1000);
         setLocationRelativeTo(null);
         util = new Utils();
-           init();
+        init();
         //   this.setContentPane(tiles);
         //this.jp_principal= new Tiles();
         // this.jp_principal.setVisible(true);
     }
-    public void init(){
-         this.setContentPane(factura_exportacion);
+
+    public void init() {
+        this.setContentPane(factura_exportacion);
         this.setVisible(true);
     }
 
@@ -73,8 +75,8 @@ public class Main extends javax.swing.JFrame {
         jmenu_productos = new javax.swing.JMenu();
         jMenu3 = new javax.swing.JMenu();
         jMenu5 = new javax.swing.JMenu();
-        jm_cargarPlantillaExportacion = new javax.swing.JMenuItem();
-        jMenuItem3 = new javax.swing.JMenuItem();
+        jm_cargarPlantillaImportacion_ = new javax.swing.JMenuItem();
+        cargarPlantillaExportacion = new javax.swing.JMenuItem();
 
         jMenu2.setText("File");
         jMenuBar2.add(jMenu2);
@@ -167,16 +169,21 @@ public class Main extends javax.swing.JFrame {
 
         jMenu5.setText("Template");
 
-        jm_cargarPlantillaExportacion.setText("Importación");
-        jm_cargarPlantillaExportacion.addActionListener(new java.awt.event.ActionListener() {
+        jm_cargarPlantillaImportacion_.setText("Importación");
+        jm_cargarPlantillaImportacion_.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jm_cargarPlantillaExportacionActionPerformed(evt);
+                jm_cargarPlantillaImportacion_ActionPerformed(evt);
             }
         });
-        jMenu5.add(jm_cargarPlantillaExportacion);
+        jMenu5.add(jm_cargarPlantillaImportacion_);
 
-        jMenuItem3.setText("Exportación");
-        jMenu5.add(jMenuItem3);
+        cargarPlantillaExportacion.setText("Exportación");
+        cargarPlantillaExportacion.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cargarPlantillaExportacionActionPerformed(evt);
+            }
+        });
+        jMenu5.add(cargarPlantillaExportacion);
 
         jMenuBar1.add(jMenu5);
 
@@ -245,11 +252,11 @@ public class Main extends javax.swing.JFrame {
         System.out.println("jmenu_productosMenuSelected");
     }//GEN-LAST:event_jmenu_productosMenuSelected
 
-    private void jm_cargarPlantillaExportacionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jm_cargarPlantillaExportacionActionPerformed
+    private void jm_cargarPlantillaImportacion_ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jm_cargarPlantillaImportacion_ActionPerformed
         this.setContentPane(templateImp);
         this.setVisible(true);
-        System.out.println("jmenu_productosActionPerformed");
-    }//GEN-LAST:event_jm_cargarPlantillaExportacionActionPerformed
+        System.out.println("jm_cargarPlantillaImportacion_ActionPerformed");
+    }//GEN-LAST:event_jm_cargarPlantillaImportacion_ActionPerformed
 
     private void jmenu_usuariosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jmenu_usuariosActionPerformed
         this.setContentPane(usuarios);
@@ -267,6 +274,12 @@ public class Main extends javax.swing.JFrame {
         this.setContentPane(factura_exportacion);
         this.setVisible(true);
     }//GEN-LAST:event_jm_factura_Exportacion_ActionPerformed
+
+    private void cargarPlantillaExportacionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cargarPlantillaExportacionActionPerformed
+        this.setContentPane(templateExp);
+        this.setVisible(true); 
+         System.out.println("cargarPlantillaExportacionActionPerformed");
+    }//GEN-LAST:event_cargarPlantillaExportacionActionPerformed
 
     /**
      * @param args the command line arguments
@@ -305,6 +318,7 @@ public class Main extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JMenuItem cargarPlantillaExportacion;
     private javax.swing.JButton jButton1;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
@@ -313,11 +327,10 @@ public class Main extends javax.swing.JFrame {
     private javax.swing.JMenu jMenu5;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuBar jMenuBar2;
-    private javax.swing.JMenuItem jMenuItem3;
     private javax.swing.JPopupMenu.Separator jSeparator1;
     private javax.swing.JMenuItem jmItem_importacion;
     private javax.swing.JMenuItem jmItem_salir;
-    private javax.swing.JMenuItem jm_cargarPlantillaExportacion;
+    private javax.swing.JMenuItem jm_cargarPlantillaImportacion_;
     private javax.swing.JMenuItem jm_factura_Exportacion_;
     private javax.swing.JMenu jmenu_productos;
     private javax.swing.JPanel jp_principal;

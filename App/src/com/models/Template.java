@@ -72,7 +72,7 @@ public class Template {
         try {
             FileInputStream inputStream = new FileInputStream(this.file);
             PreparedStatement ps = _con.getConexion().prepareCall("INSERT INTO template (ID, NOMBRE, TEMPLATE) VALUES(?,?,?)");
-            ps.setString(1, "COD_IMPORT");
+            ps.setString(1, this.Id);
             ps.setString(2, this.Nombre);
             ps.setBlob(3, inputStream, tamanio);
             ps.execute();

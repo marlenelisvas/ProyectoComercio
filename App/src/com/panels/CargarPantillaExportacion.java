@@ -19,13 +19,13 @@ import javax.swing.JOptionPane;
  *
  * @author developer
  */
-public class CargarPantillaImportacion extends javax.swing.JPanel {
+public class CargarPantillaExportacion extends javax.swing.JPanel {
    ConexionJDBC con =  new ConexionJDBC();
    Template template ;
     /**
      * Creates new form CargarPantillaImportacion
      */
-    public CargarPantillaImportacion() {
+    public CargarPantillaExportacion() {
         initComponents();
         this.cargarDatos();
         
@@ -38,7 +38,7 @@ public class CargarPantillaImportacion extends javax.swing.JPanel {
          this.lbl_nombreTemplate.setText("");
          try {
                 Statement query = _con.getConexion().createStatement();
-                ResultSet res = query.executeQuery("Select * from template WHERE ID='COD_IMPORT'");
+                ResultSet res = query.executeQuery("Select * from template where ID='COD_EXPORT'");
               
                
                 while (res.next()){     
@@ -49,12 +49,12 @@ public class CargarPantillaImportacion extends javax.swing.JPanel {
                    
                 }
                 if(this.lbl_nombreTemplate.getText().equals("")){
-                    this.btn_cargarPlantillaImportacion.setVisible(true);
+                    this.btn_cargarPlantillaExportacion.setVisible(true);
                     this.btn_eliminarTemplate.setVisible(false);
                     this.lbl_nombreTemplate.setText("");
                 }
                 else{
-                    this.btn_cargarPlantillaImportacion.setVisible(false);
+                    this.btn_cargarPlantillaExportacion.setVisible(false);
                     this.btn_eliminarTemplate.setVisible(true);
                 }
                     
@@ -75,15 +75,15 @@ public class CargarPantillaImportacion extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        btn_cargarPlantillaImportacion = new javax.swing.JButton();
+        btn_cargarPlantillaExportacion = new javax.swing.JButton();
         lbl_nombreTemplate = new javax.swing.JLabel();
         btn_eliminarTemplate = new javax.swing.JButton();
 
-        btn_cargarPlantillaImportacion.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
-        btn_cargarPlantillaImportacion.setText("Cargar Plantilla Importación");
-        btn_cargarPlantillaImportacion.addActionListener(new java.awt.event.ActionListener() {
+        btn_cargarPlantillaExportacion.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
+        btn_cargarPlantillaExportacion.setText("Cargar Plantilla Exportación");
+        btn_cargarPlantillaExportacion.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btn_cargarPlantillaImportacionActionPerformed(evt);
+                btn_cargarPlantillaExportacionActionPerformed(evt);
             }
         });
 
@@ -105,25 +105,27 @@ public class CargarPantillaImportacion extends javax.swing.JPanel {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(lbl_nombreTemplate, javax.swing.GroupLayout.PREFERRED_SIZE, 305, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(btn_eliminarTemplate, javax.swing.GroupLayout.PREFERRED_SIZE, 204, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(btn_cargarPlantillaImportacion))
+                .addComponent(lbl_nombreTemplate, javax.swing.GroupLayout.DEFAULT_SIZE, 321, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btn_eliminarTemplate)
+                .addGap(12, 12, 12)
+                .addComponent(btn_cargarPlantillaExportacion)
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(62, 62, 62)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(lbl_nombreTemplate, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btn_eliminarTemplate, javax.swing.GroupLayout.DEFAULT_SIZE, 50, Short.MAX_VALUE)
-                    .addComponent(btn_cargarPlantillaImportacion, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap(188, Short.MAX_VALUE))
+                .addGap(58, 58, 58)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(btn_cargarPlantillaExportacion, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(btn_eliminarTemplate, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(lbl_nombreTemplate, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(192, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
-    private void btn_cargarPlantillaImportacionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_cargarPlantillaImportacionActionPerformed
+    private void btn_cargarPlantillaExportacionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_cargarPlantillaExportacionActionPerformed
            
        String nombre = JOptionPane.showInputDialog(null, "Nombre", "");
         
@@ -133,7 +135,7 @@ public class CargarPantillaImportacion extends javax.swing.JPanel {
         int estado = seleccionar.showOpenDialog(null);
         if(estado == JFileChooser.APPROVE_OPTION){
             File archivo = seleccionar.getSelectedFile();
-            Template temp = new Template("COD_IMPORT", nombre, archivo);
+            Template temp = new Template("COD_EXPORT", nombre, archivo);
             if(temp.insertImportacion()){
                 this.cargarDatos();
                 JOptionPane.showMessageDialog(null, "Se ha cargado el archivo correctamente.",
@@ -143,7 +145,7 @@ public class CargarPantillaImportacion extends javax.swing.JPanel {
                 "Error", JOptionPane.ERROR_MESSAGE);
             }
         }
-    }//GEN-LAST:event_btn_cargarPlantillaImportacionActionPerformed
+    }//GEN-LAST:event_btn_cargarPlantillaExportacionActionPerformed
 
     private void btn_eliminarTemplateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_eliminarTemplateActionPerformed
        
@@ -160,7 +162,7 @@ public class CargarPantillaImportacion extends javax.swing.JPanel {
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btn_cargarPlantillaImportacion;
+    private javax.swing.JButton btn_cargarPlantillaExportacion;
     private javax.swing.JButton btn_eliminarTemplate;
     private javax.swing.JLabel lbl_nombreTemplate;
     // End of variables declaration//GEN-END:variables
