@@ -16,7 +16,7 @@ import java.util.logging.Logger;
 
 /**
  *
- * @author
+ * @Jenny
  */
 public class Main extends javax.swing.JFrame {
 
@@ -48,7 +48,7 @@ public class Main extends javax.swing.JFrame {
     }
 
     public void init() {
-        this.setContentPane(factura_exportacion);
+        this.setContentPane(factura);
         this.setVisible(true);
     }
 

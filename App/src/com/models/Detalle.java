@@ -96,7 +96,27 @@ public class Detalle {
         }
         return _res;
     }
-   
+//=====================================================================
+    public boolean delete() {
+//=====================================================================
+         ConexionJDBC _con = new ConexionJDBC();
+        boolean _res = false;
+        try {
+            Statement query = _con.getConexion().createStatement();
+            //ResultSet no vale para el insert y executeQuery no sirve para actualizar base de datos
+            int res = query.executeUpdate("Delete from detalles WHERE ID_DETALLES="+this.ID_DETALLE);
+           
+            _res = true;
+            _con.getConexion().close();
+        } catch (SQLException ex) {
+            System.out.println(ex.getMessage());
+             
+            //throw new RuntimeException(ex.getMessage());
+        }
+        return _res;
+    }
+
+
     public void imprimir(){
         System.out.println("ID_DETALLE: "+ this.ID_DETALLE +
         "\nFACTURA: "+this.FACTURA +

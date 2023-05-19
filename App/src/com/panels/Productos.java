@@ -19,7 +19,7 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 /**
  *
- * @author developer
+ * @author Jenny
  */
 public class Productos extends javax.swing.JPanel {
     ConexionJDBC con;

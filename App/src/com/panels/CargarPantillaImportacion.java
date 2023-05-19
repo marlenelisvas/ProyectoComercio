@@ -17,7 +17,7 @@ import javax.swing.JOptionPane;
 
 /**
  *
- * @author developer
+ * @author Jenny
  */
 public class CargarPantillaImportacion extends javax.swing.JPanel {
    ConexionJDBC con =  new ConexionJDBC();

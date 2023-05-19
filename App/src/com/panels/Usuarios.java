@@ -19,7 +19,7 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 /**
  *
- * @author developer
+ * @author Jenny
  */
 public class Usuarios extends javax.swing.JPanel {
     ConexionJDBC con;
@@ -70,8 +70,9 @@ public class Usuarios extends javax.swing.JPanel {
                  Usuario _user = usuarios.get(i);
                  t_model.setValueAt(_user.getDni(), i, 0);
                  t_model.setValueAt(_user.getNombre(), i, 1);
-                 t_model.setValueAt(_user.getDireccion1(), i, 2);
-                 t_model.setValueAt(_user.getDireccion2(), i, 3);
+                 t_model.setValueAt(_user.getApellidos(), i, 2);
+                 t_model.setValueAt(_user.getDireccion1(), i, 3);
+                 t_model.setValueAt(_user.getDireccion2(), i, 4);
              }
              
         }

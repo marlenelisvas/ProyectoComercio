@@ -2,6 +2,7 @@ package com.models;
 
 import com.jdbc.ConexionJDBC;
 import java.io.ByteArrayInputStream;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -15,6 +16,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Random;
 import java.util.logging.Level;
+import javax.swing.JOptionPane;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
 import org.apache.poi.xwpf.usermodel.XWPFParagraph;
 import org.apache.poi.xwpf.usermodel.XWPFRun;
@@ -147,8 +149,22 @@ public class Factura {
         return COND_PAGO;
     }
 
-    public void setCOND_PAGO(Pago COND_PAGO) {
-        this.COND_PAGO = COND_PAGO;
+    public void setCOND_PAGO(String COND_PAGO) {
+        switch (COND_PAGO) {
+            case "CHEQUE":
+                this.COND_PAGO = Pago.CHEQUE;
+                break;
+            case "DEBITO":
+                this.COND_PAGO = Pago.DEBITO;
+                break;
+            case "CREDITO":
+                this.COND_PAGO = Pago.CREDITO;
+                break;
+            default:
+                this.COND_PAGO = Pago.EFECTIVO;
+                break;
+        }
+
     }
 
     public List<Detalle> getDetalles() {
@@ -220,11 +236,34 @@ public class Factura {
         }
         return _res;
     }
+//=====================================================================
+
+    public boolean delete() {
+//=====================================================================
+
+        for (int i = 0; i < this.detalles.size(); i++) {
+            this.detalles.get(i).delete();
+        }
+        ConexionJDBC _con = new ConexionJDBC();
+        boolean _res = false;
+        try {
+            Statement query = _con.getConexion().createStatement();
+            //ResultSet no vale para el insert y executeQuery no sirve para actualizar base de datos
+            int res = query.executeUpdate("Delete from factura WHERE ID_FACTURA=" + this.Id_factura);
+
+            _res = true;
+            _con.getConexion().close();
+        } catch (SQLException ex) {
+            System.out.println(ex.getMessage());
+
+            //throw new RuntimeException(ex.getMessage());
+        }
+        return _res;
+    }
 
     public boolean cargarDetalles() {
         boolean _res = false;
         if (this.Id_factura > 0) {
-
             ConexionJDBC _con = new ConexionJDBC();
             this.Base_Imponible = 0.0;
             try {
@@ -247,13 +286,10 @@ public class Factura {
                     aux.imprimir();
                     this.detalles.add(aux);
                 }
-
                 _res = true;
                 _con.getConexion().close();
             } catch (SQLException ex) {
-
                 throw new RuntimeException(ex);
-
             }
         }
         return _res;
@@ -272,28 +308,29 @@ public class Factura {
         try {
 
             InputStream in = tempImp.getTemplate(tipo);
-            Random random = new Random(); // to generate a random fileName
+            Random random = new Random();
             int randomNumber = random.nextInt(987656554);
             if (in != null) {
                 XWPFDocument doc = new XWPFDocument(in);
-                this.replaceTags(doc, this.getTags()); // Replace Tags in the doc
-                FileOutputStream fileOutputStream = new FileOutputStream("Factura_" + randomNumber); // Temp location
+                this.replaceTags(doc, this.getTags()); // reemplaza los tags
+                FileOutputStream fileOutputStream = new FileOutputStream("Factura_" + tipo + "_" + randomNumber); // Temp location
                 if (!inPDF) {
-                    doc.write(fileOutputStream);// writing the updated Template to FileOutputStream // to save file
-                    byte[] encoded = Files.readAllBytes(Paths.get("Factura_" + randomNumber)); // reading the file
+                    doc.write(fileOutputStream);// salida del archivo actualizado
+                    byte[] encoded = Files.readAllBytes(Paths.get("Factura_" + tipo + "_" + randomNumber)); // lee el archivo
                     InputStream convertedInputStream = new ByteArrayInputStream(encoded);
-                    IOUtils.copy(convertedInputStream, new FileOutputStream("Factura_" + randomNumber + ".docx"));
+                    IOUtils.copy(convertedInputStream, new FileOutputStream("Factura_" + tipo + "_" + randomNumber + ".docx"));
                     resp = true;
                 } else {
-                  //  PdfOptions options = PdfOptions.create().fontEncoding("windows-1250");
-                   // PdfConverter..getInstance().convert(doc, fileOutputStream, options);
-                    byte[] encoded = Files.readAllBytes(Paths.get("GeneratedDoc_" + randomNumber)); // reading the file*/
+                    //no reconoce la libreria?????????????
+                    //  PdfOptions options = PdfOptions.create().fontEncoding("windows-1250");
+                    // PdfConverter..getInstance().convert(doc, fileOutputStream, options);
+                    byte[] encoded = Files.readAllBytes(Paths.get("Factura_" + tipo + "_" + randomNumber)); // reading the file*/
 
                     InputStream convertedInputStream = new ByteArrayInputStream(encoded);
-                    IOUtils.copy(convertedInputStream, new FileOutputStream("Factura" + randomNumber + ".pdf"));
+                    IOUtils.copy(convertedInputStream, new FileOutputStream("Factura_" + tipo + "_" + randomNumber + ".pdf"));
                 }
             }
-            //response.flushBuffer();
+
         } catch (IOException ex) {
             throw new RuntimeException(ex);
 
@@ -304,7 +341,6 @@ public class Factura {
     }
 
     private void replaceTags(XWPFDocument doc, JSONArray requestTagsArray) throws IOException, XmlException {
-        // To replace Tags
         replaceParagraphTags(doc.getParagraphs(), requestTagsArray);
         replaceTableTags(doc.getTables(), requestTagsArray);
         replaceHeaderFooterTags(doc, requestTagsArray);
@@ -355,12 +391,12 @@ public class Factura {
         tagsArray.put(objToPlace);
 
         objToPlace = new JSONObject();
-        objToPlace.put("tag", "@{descuento}");
+        objToPlace.put("tag", "@{IRPF}");
         objToPlace.put("value", this.IRPF + "");
         tagsArray.put(objToPlace);
 
         objToPlace = new JSONObject();
-        objToPlace.put("tag", "@{iva}");
+        objToPlace.put("tag", "@{IVA}");
         objToPlace.put("value", this.IVA + "");
         tagsArray.put(objToPlace);
 
@@ -377,8 +413,7 @@ public class Factura {
     }
 
     private void replaceParagraphTags(List<XWPFParagraph> paragraphs, JSONArray requestTagsArray) {
-        System.out.println("replaceParagraphTags: ");
-        // To replace Tags in Paragraphs
+
         List<XWPFRun> runs;
         String text;
         JSONObject tagObject;
@@ -392,13 +427,8 @@ public class Factura {
                     for (int i = 0; i < requestTagsArray.length(); i++) {
                         tagObject = requestTagsArray.getJSONObject(i);
                         if (text != null && text.contains(tagObject.getString("tag"))) {
-                            text = text.replace(tagObject.getString("tag"), tagObject.getString("value"));// replacing
-                            // tag
-                            // key
-                            // with
-                            // tag
-                            // value
-                            r.setText(text, 0); // setting The text to 'run' in the same document
+                            text = text.replace(tagObject.getString("tag"), tagObject.getString("value"));
+                            r.setText(text, 0);
                         }
                     }
                 }
@@ -407,58 +437,60 @@ public class Factura {
     }
 
     private void replaceTableTags(List<XWPFTable> tables, JSONArray requestTagsArray) {
+
         // To replace Tags in Tables
-        for (XWPFTable xwpfTable : tables) {
-            List<XWPFTableRow> row = xwpfTable.getRows();
-            for (XWPFTableRow xwpfTableRow : row) {
-                List<XWPFTableCell> cell = xwpfTableRow.getTableCells();
-                for (XWPFTableCell xwpfTableCell : cell) {
-                    if (xwpfTableCell != null) {
-                        replaceParagraphTags(xwpfTableCell.getParagraphs(), requestTagsArray);
-                        List<XWPFTable> internalTables = xwpfTableCell.getTables();
-                        if (internalTables.size() != 0) {
-                            replaceTableTags(internalTables, requestTagsArray);
-                        }
-                    }
-                }
-            }
+        System.out.println("Tables size " + tables.size());
+        XWPFTable xwpfTable = tables.get(0);
+
+        XWPFTableRow xwpfTableRow = xwpfTable.getRow(1);
+        System.out.println("detalles size " + detalles.size());
+        for (int i = 0; i < this.detalles.size(); i++) {
+            Detalle d = this.detalles.get(i);
+            addRow(xwpfTable, xwpfTableRow,
+                    d.getPRODUCTO().getDESCRIPCION(),
+                    d.UNIDADES + "",
+                    d.getPRODUCTO().getPRECIO() + "",
+                    d.TOTAL + "");
         }
+        if (this.detalles.size() > 0) {
+            xwpfTable.removeRow(1);
+        }
+
     }
 
-    public static void createTable(XWPFDocument doc) {
-        XWPFTable table = doc.createTable(10, 4);
-        int i = 0;
-        table.getRow(i).getCell(0).setText("sdfsdf");
-
+    private static void addRow(XWPFTable table, XWPFTableRow row, String... colTexts) {
+        for (int col = 0; col < colTexts.length; col++) {
+            row.getCell(col).getParagraphArray(0).getRuns().get(0).setText(colTexts[col], 0);
+        }
+        table.addRow(row);
     }
 
     private void replaceHeaderFooterTags(XWPFDocument doc, JSONArray requestTagsArray)
             throws IOException, XmlException {
-        // To replace Header and Footer Tags
+
         XWPFHeaderFooterPolicy policy = new XWPFHeaderFooterPolicy(doc);
-        // processing default Header
+
         XWPFHeader header = policy.getDefaultHeader();
         if (header != null) {
             replaceParagraphTags(header.getParagraphs(), requestTagsArray);
             replaceTableTags(header.getTables(), requestTagsArray);
         }
-        // processing default footer
+
         XWPFFooter footer = policy.getDefaultFooter();
         if (footer != null) {
             replaceParagraphTags(footer.getParagraphs(), requestTagsArray);
             replaceTableTags(footer.getTables(), requestTagsArray);
         }
-        // Processing Header and Footer of each page (In case there is of different
-        // Header and Footer are set for each page)
+
         int numberOfPages = doc.getProperties().getExtendedProperties().getUnderlyingProperties().getPages();
         for (int i = 0; i < numberOfPages; i++) {
-            // processing headers
+
             header = policy.getHeader(i);
             if (header != null) {
                 replaceParagraphTags(header.getParagraphs(), requestTagsArray);
                 replaceTableTags(header.getTables(), requestTagsArray);
             }
-            // processing footers
+
             footer = policy.getFooter(i);
             if (footer != null) {
                 replaceParagraphTags(footer.getParagraphs(), requestTagsArray);

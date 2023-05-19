@@ -15,11 +15,12 @@ import org.apache.logging.log4j.Logger;
 
 /**
  *
- * @author developer
+ * @author Jenny
  */
 enum Tipo {
     EXPORTACION, IMPORTACION
 }
+
 public class Factura_Exportacion extends javax.swing.JPanel {
 
     ConexionJDBC con;
@@ -43,13 +44,14 @@ public class Factura_Exportacion extends javax.swing.JPanel {
     }
 
     public void inicializar() {
-        factura = new Factura();
-        util = new Utils();
+        this.factura = new Factura();
+        this.util = new Utils();
         this.btn_addCliente_.setVisible(false);
         this.btn_addVendedor_.setVisible(false);
-
+        this.txt_TotalFactura.setEditable(false);
         //cargar_datos_productos();
         this.cargarDetalles();
+        cb_formas_de_pago.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "EFECTIVO", "DEBITO", "CREDITO", "CHEQUE" }));
     }
 
     public void mostrar_ocultar_cliente(boolean x, Usuario user) {
@@ -62,39 +64,77 @@ public class Factura_Exportacion extends javax.swing.JPanel {
         this.lbl_nombre_empresa.setVisible(x);
         this.lbl_apellidos_empresa.setVisible(x);
 
-        txt_dni_cliente.setEditable(false);
-        txt_nombre_cliente.setEditable(false);
-        txt_apellidos_cliente.setEditable(false);
+        this.txt_dni_cliente.setEditable(false);
+        this.txt_nombre_cliente.setEditable(false);
+        this.txt_apellidos_cliente.setEditable(false);
 
         if (x) {
-            txt_dni_cliente.setText(user.getDni());
-            txt_nombre_cliente.setText(user.getNombre());
-            txt_apellidos_cliente.setText(user.getApellidos());
+            this.txt_dni_cliente.setText(user.getDni());
+            this.txt_nombre_cliente.setText(user.getNombre());
+            this.txt_apellidos_cliente.setText(user.getApellidos());
 
         } else {
 
-            txt_dni_cliente.setText("");
-            txt_nombre_cliente.setText("");
-            txt_apellidos_cliente.setText("");
+            this.txt_dni_cliente.setText("");
+            this.txt_nombre_cliente.setText("");
+            this.txt_apellidos_cliente.setText("");
         }
     }
 
     public void mostrar_ocultar_vendedor(boolean x, Usuario user) {
-       
+
         this.btn_addVendedor_.setVisible(x);
 
     }
 
-    public String calcularTotal() {
-        return "";
+    public void clearFormProductos() {
+        this.txt_IdProducto.setText("");
+        this.txt_unidades.setText("");
+        this.txt_descripcion.setText("");
+        this.txt_precioUnitario.setText("");
     }
 
-    public void addVendedor() {
+ public void clearFormFactura() {
+        this.txt_apellidos_empresa.setText("");
+        this.txt_dni_empresa.setText("");
+        this.txt_nombre_empresa.setText("");
+        this.txt_direccion_empresa.setText("");
 
-    }
-
-    public void addCliente() {
-
+        txt_dni_cliente.setText("");
+        txt_nombre_cliente.setText("");
+        txt_apellidos_cliente.setText("");
+        this.txt_dir1_cliente.setText("");
+        this.txt_dir2_cliente.setText("");
+        this.clearFormProductos();
+        this.txt_IRPF.setText("");
+        this.txt_IVA.setText("");
+        this.txt_baseImponible.setText("");
+        this.txt_TotalFactura.setText("");
+        factura = new Factura();
+        util = new Utils();
+        this.btn_addCliente_.setVisible(false);
+        this.btn_addVendedor_.setVisible(false);
+        txt_TotalFactura.setEditable(false);
+        
+        
+        this.tb_detalles.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Descripción", "Unidades", "Precio Unitario", "Precio Total"
+            }
+        ) {
+            Class[] types = new Class [] {
+                java.lang.String.class, java.lang.Integer.class, java.lang.Float.class, java.lang.Float.class
+            };    public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+        });
+            
     }
 
     public boolean guardarUsuario(Usuario usuario) {
@@ -132,19 +172,19 @@ public class Factura_Exportacion extends javax.swing.JPanel {
 
                 if (cliente) {
                     this.btn_addCliente_.setVisible(false);
-                    txt_dni_cliente.setText(user.getDni());
-                    txt_nombre_cliente.setText(user.getNombre());
-                    txt_apellidos_cliente.setText(user.getApellidos());
-                    txt_dir1_cliente.setText(user.getDireccion1());
-                    txt_dir2_cliente.setText(user.getDireccion2());
+                    this.txt_dni_cliente.setText(user.getDni());
+                    this.txt_nombre_cliente.setText(user.getNombre());
+                    this.txt_apellidos_cliente.setText(user.getApellidos());
+                    this.txt_dir1_cliente.setText(user.getDireccion1());
+                    this.txt_dir2_cliente.setText(user.getDireccion2());
 
                 } else {//vendedor labels-inputs vendedor
                     this.btn_addVendedor_.setVisible(false);
-                    txt_dni_empresa.setText(user.getDni());
-                    txt_nombre_empresa.setText(user.getNombre());
-                    txt_apellidos_empresa.setText(user.getApellidos());
-                    txt_direccion_empresa.setText(user.getDireccion1());
-                    
+                    this.txt_dni_empresa.setText(user.getDni());
+                    this.txt_nombre_empresa.setText(user.getNombre());
+                    this.txt_apellidos_empresa.setText(user.getApellidos());
+                    this.txt_direccion_empresa.setText(user.getDireccion1());
+
                 }
             } else {
                 if (cliente) {
@@ -216,6 +256,7 @@ public class Factura_Exportacion extends javax.swing.JPanel {
         btn_Eliminar_ = new javax.swing.JButton();
         btn_Procesar_ = new javax.swing.JButton();
         btn_ImprimirDOC_ = new javax.swing.JButton();
+        btn_Eliminar_1 = new javax.swing.JButton();
         jp_cliente = new javax.swing.JPanel();
         lbl_section = new javax.swing.JLabel();
         lbl_dni = new javax.swing.JLabel();
@@ -359,6 +400,13 @@ public class Factura_Exportacion extends javax.swing.JPanel {
             }
         });
 
+        btn_Eliminar_1.setText("LIMPIAR FACTURA");
+        btn_Eliminar_1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_Eliminar_1ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jp_footerLayout = new javax.swing.GroupLayout(jp_footer);
         jp_footer.setLayout(jp_footerLayout);
         jp_footerLayout.setHorizontalGroup(
@@ -369,8 +417,10 @@ public class Factura_Exportacion extends javax.swing.JPanel {
                 .addGap(18, 18, 18)
                 .addComponent(btn_ImprimirPDF_, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(btn_Eliminar_, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btn_Eliminar_1, javax.swing.GroupLayout.PREFERRED_SIZE, 142, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(btn_Eliminar_, javax.swing.GroupLayout.PREFERRED_SIZE, 138, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(btn_Procesar_, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
@@ -379,12 +429,13 @@ public class Factura_Exportacion extends javax.swing.JPanel {
             .addGroup(jp_footerLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jp_footerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(btn_Procesar_, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btn_Eliminar_, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(btn_ImprimirPDF_, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 46, Short.MAX_VALUE)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jp_footerLayout.createSequentialGroup()
                         .addComponent(btn_ImprimirDOC_, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGap(4, 4, 4)))
+                        .addGap(4, 4, 4))
+                    .addComponent(btn_Procesar_, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btn_Eliminar_, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btn_Eliminar_1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
 
@@ -718,20 +769,28 @@ public class Factura_Exportacion extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void cb_formas_de_pagoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cb_formas_de_pagoActionPerformed
-        // TODO add your handling code here:
+        this.cb_formas_de_pago.getSelectedItem();
+        
+        this.factura.setCOND_PAGO(this.cb_formas_de_pago.getSelectedItem().toString());
     }//GEN-LAST:event_cb_formas_de_pagoActionPerformed
 
     private void btn_Procesar_ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_Procesar_ActionPerformed
-       this.factura.setIRPF(Double.parseDouble(this.txt_IRPF.getText()));
-       this.factura.setIVA(Double.parseDouble(this.txt_IVA.getText()));
-       this.txt_TotalFactura.setText(factura.getTotal()+"");
-       this.factura.setTipo(false);
-       this.factura.update();
-       this.factura.imprimir();
+        this.factura.setIRPF(Double.parseDouble(this.txt_IRPF.getText()));
+        this.factura.setIVA(Double.parseDouble(this.txt_IVA.getText()));
+        this.txt_TotalFactura.setText(factura.getTotal() + "");
+        this.factura.setTipo(false);
+        this.factura.update();
+        this.factura.imprimir();
     }//GEN-LAST:event_btn_Procesar_ActionPerformed
 
     private void btn_Eliminar_ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_Eliminar_ActionPerformed
-        // TODO add your handling code here:
+        if (this.factura.delete()) {
+            this.clearFormFactura();
+            this.mostrarMensaje("la factura se ha eliminado", "Válido", JOptionPane.PLAIN_MESSAGE);
+        } else {
+            JOptionPane.showMessageDialog(null, "error",
+                    "Error", JOptionPane.ERROR);
+        }
     }//GEN-LAST:event_btn_Eliminar_ActionPerformed
 
     private void btn_ImprimirPDF_ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_ImprimirPDF_ActionPerformed
@@ -754,13 +813,13 @@ public class Factura_Exportacion extends javax.swing.JPanel {
     }//GEN-LAST:event_txt_dni_empresaPropertyChange
 
     private void btn_addVendedor_ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_addVendedor_ActionPerformed
-     this.vendedor=new Usuario(this.txt_dni_empresa.getText(), txt_nombre_empresa.getText(),txt_apellidos_empresa.getText(),txt_direccion_empresa.getText()  ,""        );
+        this.vendedor = new Usuario(this.txt_dni_empresa.getText(), txt_nombre_empresa.getText(), txt_apellidos_empresa.getText(), txt_direccion_empresa.getText(), "");
 
         this.guardarUsuario(vendedor);
     }//GEN-LAST:event_btn_addVendedor_ActionPerformed
 
     private void btn_addCliente_ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_addCliente_ActionPerformed
-        this.cliente=new Usuario(this.txt_dni_cliente.getText(), txt_nombre_cliente.getText(),txt_apellidos_cliente.getText(),this.txt_dir1_cliente.getText()  ,this.txt_dir2_cliente.getText()       );
+        this.cliente = new Usuario(this.txt_dni_cliente.getText(), txt_nombre_cliente.getText(), txt_apellidos_cliente.getText(), this.txt_dir1_cliente.getText(), this.txt_dir2_cliente.getText());
 
         this.guardarUsuario(cliente);
     }//GEN-LAST:event_btn_addCliente_ActionPerformed
@@ -797,12 +856,12 @@ public class Factura_Exportacion extends javax.swing.JPanel {
     }//GEN-LAST:event_jB_buscarIdActionPerformed
 
     private void btn_add_DetalleActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_add_DetalleActionPerformed
-           
+
         if (this.txt_unidades.getText().equals("")) {
             this.mostrarMensaje("Ingrese las unidades", "Error", JOptionPane.ERROR_MESSAGE);
         } else {
             //añadir tipo
-            
+
             if (factura.getDetalles().size() == 0) {
                 factura = new Factura();
                 factura.setCliente(this.cliente);
@@ -813,9 +872,10 @@ public class Factura_Exportacion extends javax.swing.JPanel {
             }
             this.nuevoDetalle.setFACTURA(this.factura);
             this.nuevoDetalle.setUNIDADES(Integer.parseInt(this.txt_unidades.getText()));
-            
+
             if (this.nuevoDetalle.insert()) {
                 this.cargarDetalles();
+                this.clearFormProductos();
             } else {
                 this.mostrarMensaje("No se ha guardado el detalla", "Error", JOptionPane.ERROR_MESSAGE);
             }
@@ -823,12 +883,17 @@ public class Factura_Exportacion extends javax.swing.JPanel {
     }//GEN-LAST:event_btn_add_DetalleActionPerformed
 
     private void txt_unidadesKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txt_unidadesKeyPressed
-        
+
     }//GEN-LAST:event_txt_unidadesKeyPressed
+
+    private void btn_Eliminar_1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_Eliminar_1ActionPerformed
+       this.clearFormFactura();
+    }//GEN-LAST:event_btn_Eliminar_1ActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btn_Eliminar_;
+    private javax.swing.JButton btn_Eliminar_1;
     private javax.swing.JButton btn_ImprimirDOC_;
     private javax.swing.JButton btn_ImprimirPDF_;
     private javax.swing.JButton btn_Procesar_;

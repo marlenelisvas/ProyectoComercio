@@ -16,7 +16,7 @@ import org.apache.logging.log4j.Logger;
 
 /**
  *
- * @author developer
+ * @author Jenny
  */
 public class Factura_Importacion extends javax.swing.JPanel {
 
@@ -39,15 +39,60 @@ public class Factura_Importacion extends javax.swing.JPanel {
         this.inicializar();
 
     }
+ public void clearFormFactura() {
+        this.txt_apellidos_empresa.setText("");
+        this.txt_dni_empresa.setText("");
+        this.txt_nombre_empresa.setText("");
+        this.txt_direccion_empresa.setText("");
 
+        txt_dni_cliente.setText("");
+        txt_nombre_cliente.setText("");
+        txt_apellidos_cliente.setText("");
+        this.txt_dir1_cliente.setText("");
+        this.txt_dir2_cliente.setText("");
+        this.clearFormProductos();
+        this.txt_IRPF.setText("");
+        this.txt_IVA.setText("");
+        this.txt_baseImponible.setText("");
+        this.txt_TotalFactura.setText("");
+        factura = new Factura();
+        util = new Utils();
+        this.btn_addCliente_.setVisible(false);
+        this.btn_addVendedor_.setVisible(false);
+        txt_TotalFactura.setEditable(false);
+        
+        
+        this.tb_detalles.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Descripción", "Unidades", "Precio Unitario", "Precio Total"
+            }
+        ) {
+            Class[] types = new Class [] {
+                java.lang.String.class, java.lang.Integer.class, java.lang.Float.class, java.lang.Float.class
+            };    public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+        });
+            
+    }
     public void inicializar() {
         factura = new Factura();
         util = new Utils();
         this.btn_addCliente_.setVisible(false);
         this.btn_addVendedor_.setVisible(false);
+        txt_TotalFactura.setEditable(false);
 
         //cargar_datos_productos();
         this.cargarDetalles();
+        
+        cb_formas_de_pago.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "EFECTIVO", "DEBITO", "CREDITO", "CHEQUE" }));
+        
     }
 
     public void mostrar_ocultar_cliente(boolean x, Usuario user) {
@@ -86,17 +131,6 @@ public class Factura_Importacion extends javax.swing.JPanel {
 
     }
 
-    public String calcularTotal() {
-        return "";
-    }
-
-    public void addVendedor() {
-
-    }
-
-    public void addCliente() {
-
-    }
 
     public boolean guardarUsuario(Usuario usuario) {
         //validar campos vacios
@@ -218,6 +252,7 @@ public class Factura_Importacion extends javax.swing.JPanel {
         btn_Eliminar_ = new javax.swing.JButton();
         btn_Procesar_ = new javax.swing.JButton();
         btn_ImprimirDOC_ = new javax.swing.JButton();
+        btn_limpiarForm_ = new javax.swing.JButton();
         jp_cliente = new javax.swing.JPanel();
         lbl_section = new javax.swing.JLabel();
         lbl_dni = new javax.swing.JLabel();
@@ -361,6 +396,13 @@ public class Factura_Importacion extends javax.swing.JPanel {
             }
         });
 
+        btn_limpiarForm_.setText("Limpiar Factura");
+        btn_limpiarForm_.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_limpiarForm_ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jp_footerLayout = new javax.swing.GroupLayout(jp_footer);
         jp_footer.setLayout(jp_footerLayout);
         jp_footerLayout.setHorizontalGroup(
@@ -371,6 +413,8 @@ public class Factura_Importacion extends javax.swing.JPanel {
                 .addGap(18, 18, 18)
                 .addComponent(btn_ImprimirPDF_, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(btn_limpiarForm_, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
                 .addComponent(btn_Eliminar_, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btn_Procesar_, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -382,11 +426,12 @@ public class Factura_Importacion extends javax.swing.JPanel {
                 .addContainerGap()
                 .addGroup(jp_footerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(btn_Procesar_, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btn_Eliminar_, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(btn_ImprimirPDF_, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 46, Short.MAX_VALUE)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jp_footerLayout.createSequentialGroup()
                         .addComponent(btn_ImprimirDOC_, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGap(4, 4, 4)))
+                        .addGap(4, 4, 4))
+                    .addComponent(btn_limpiarForm_, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btn_Eliminar_, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
 
@@ -629,10 +674,10 @@ public class Factura_Importacion extends javax.swing.JPanel {
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(lbl_idProducto, javax.swing.GroupLayout.DEFAULT_SIZE, 113, Short.MAX_VALUE)
+                                .addComponent(lbl_idProducto, javax.swing.GroupLayout.DEFAULT_SIZE, 192, Short.MAX_VALUE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(jB_buscarId))
-                            .addComponent(txt_IdProducto, javax.swing.GroupLayout.DEFAULT_SIZE, 182, Short.MAX_VALUE))
+                            .addComponent(txt_IdProducto, javax.swing.GroupLayout.DEFAULT_SIZE, 261, Short.MAX_VALUE))
                         .addGap(93, 93, 93)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(txt_descripcion)
@@ -644,9 +689,9 @@ public class Factura_Importacion extends javax.swing.JPanel {
                         .addGap(18, 18, 18)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(txt_precioUnitario, javax.swing.GroupLayout.PREFERRED_SIZE, 103, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(lbl_precioUnitario, javax.swing.GroupLayout.PREFERRED_SIZE, 103, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(btn_add_Detalle)))
+                            .addComponent(lbl_precioUnitario, javax.swing.GroupLayout.PREFERRED_SIZE, 103, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addGap(85, 85, 85)
+                .addComponent(btn_add_Detalle)
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
@@ -669,12 +714,12 @@ public class Factura_Importacion extends javax.swing.JPanel {
                             .addComponent(txt_precioUnitario, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(47, 47, 47)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(btn_add_Detalle, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                .addComponent(lbl_precioUnitario)
-                                .addComponent(lbl_unidades)))))
-                .addContainerGap(13, Short.MAX_VALUE))
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(lbl_precioUnitario)
+                            .addComponent(lbl_unidades))
+                        .addGap(4, 4, 4)
+                        .addComponent(btn_add_Detalle, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(22, Short.MAX_VALUE))
         );
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
@@ -710,7 +755,7 @@ public class Factura_Importacion extends javax.swing.JPanel {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 161, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 145, Short.MAX_VALUE)
                 .addGap(18, 18, 18)
                 .addComponent(jp_impuestos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
@@ -720,7 +765,11 @@ public class Factura_Importacion extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void cb_formas_de_pagoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cb_formas_de_pagoActionPerformed
-        // TODO add your handling code here:
+        
+        this.cb_formas_de_pago.getSelectedItem();
+        
+        this.factura.setCOND_PAGO(this.cb_formas_de_pago.getSelectedItem().toString());
+        
     }//GEN-LAST:event_cb_formas_de_pagoActionPerformed
 
     private void btn_Procesar_ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_Procesar_ActionPerformed
@@ -731,7 +780,13 @@ public class Factura_Importacion extends javax.swing.JPanel {
     }//GEN-LAST:event_btn_Procesar_ActionPerformed
 
     private void btn_Eliminar_ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_Eliminar_ActionPerformed
-        // TODO add your handling code here:
+       if (this.factura.delete()) {
+            this.clearFormFactura();
+            this.mostrarMensaje("la factura se ha eliminado", "Válido", JOptionPane.PLAIN_MESSAGE);
+        } else {
+            JOptionPane.showMessageDialog(null, "error",
+                    "Error", JOptionPane.ERROR);
+        }
     }//GEN-LAST:event_btn_Eliminar_ActionPerformed
 
     private void btn_ImprimirPDF_ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_ImprimirPDF_ActionPerformed
@@ -816,6 +871,7 @@ public class Factura_Importacion extends javax.swing.JPanel {
             
             if (this.nuevoDetalle.insert()) {
                 this.cargarDetalles();
+                this.clearFormProductos();
             } else {
                 this.mostrarMensaje("No se ha guardado el detalla", "Error", JOptionPane.ERROR_MESSAGE);
             }
@@ -823,10 +879,20 @@ public class Factura_Importacion extends javax.swing.JPanel {
 
 
     }//GEN-LAST:event_btn_add_DetalleActionPerformed
-
+    public void clearFormProductos(){
+        this.txt_IdProducto.setText("");
+        this.txt_unidades.setText("");
+        this.txt_descripcion.setText("");
+        txt_precioUnitario.setText("");
+    }
+    
     private void txt_unidadesKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txt_unidadesKeyPressed
         
     }//GEN-LAST:event_txt_unidadesKeyPressed
+
+    private void btn_limpiarForm_ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_limpiarForm_ActionPerformed
+        this.clearFormFactura();
+    }//GEN-LAST:event_btn_limpiarForm_ActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -839,6 +905,7 @@ public class Factura_Importacion extends javax.swing.JPanel {
     private javax.swing.JButton btn_add_Detalle;
     private javax.swing.JButton btn_buscarCliente_;
     private javax.swing.JButton btn_buscarVendedor_;
+    private javax.swing.JButton btn_limpiarForm_;
     private javax.swing.JComboBox<String> cb_formas_de_pago;
     private javax.swing.JButton jB_buscarId;
     private javax.swing.JLabel jLabel1;

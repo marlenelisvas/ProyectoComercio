@@ -9,7 +9,7 @@ import com.app.Main;
 
 /**
  *
- * @author developer
+ * @author Jenny
  */
 public class Tiles extends javax.swing.JPanel {
    
