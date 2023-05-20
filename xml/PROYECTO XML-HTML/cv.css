@@ -1,0 +1,11 @@
+
+body{
+    background: linear-gradient(white, white, rgb(179, 245, 240),white,rgb(179, 245, 240),white);
+    height: 100%;
+}
+
+h1{
+    color: blue;
+    font-size: 50px;  
+    text-align: center;
+}

@@ -1,0 +1,64 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet href="cv.xsl" type="text/xsl"?>
+<curriculum>
+      <datos_personales>
+          <nombre>Jenny Paulina</nombre>
+          <apellidos>Vásquez Calero</apellidos>
+          <fecha_nacimiento>09-03-1991</fecha_nacimiento>
+          <lugar_nacimiento>Quito - Ecuador </lugar_nacimiento>
+          <nacionalidades>
+              <nacionalidad>Española</nacionalidad>
+          </nacionalidades>
+          <identificacion tipo="nif">75574927 D</identificacion>
+          <foto></foto>
+      </datos_personales>
+  <datos_contacto>
+    <via tipo="">Calle</via>
+    <nombre_via>Matadero </nombre_via>
+    <numero>10</numero>
+    <portal>2</portal>
+    <piso>2</piso>
+    <puerta>N</puerta>
+    <codigo_postal>18195</codigo_postal>
+    <pais>España</pais>
+    <email tipo="">jenypau@gmail.com</email>
+    <telefono_movil tipo="">601305797</telefono_movil>
+    <telefono_fijo tipo="">958378036</telefono_fijo>
+  </datos_contacto>
+  <formacion_academica>
+    <superior>
+      <nombre>Administración y Dirección de Empresas</nombre>
+      <lugar>Universidad de Granada</lugar>
+      <fecha_inicio>09-2015</fecha_inicio>
+    </superior>
+    <FP>
+      <nombre>Desarrollo web</nombre>
+      <lugar>Zaidin Vergeles</lugar>
+      <fecha_inicio>09-2022</fecha_inicio>
+      <fecha_fin>06-2024</fecha_fin>
+    </FP>
+  </formacion_academica>
+  <idiomas>
+    <idioma>
+      <nombre>Ingles</nombre>
+      <nivel_expresion_oral>Intermedio</nivel_expresion_oral>
+      <nivel_comprension_oral>Intermedio</nivel_comprension_oral>
+      <nivel_expresion_escrita>Intermedio</nivel_expresion_escrita>
+      <nivel_comprension_escrita>Intermedio</nivel_comprension_escrita>
+      <titulo_acreditativo>Cambridge</titulo_acreditativo>
+      <nivel_titulo>B1</nivel_titulo>
+    </idioma>
+  </idiomas>
+  <experiencia_laboral>
+    <experiencia>
+      <lugar>Axesor SL</lugar>
+      <puesto>Administrativo</puesto>
+      <fecha_inicio>11-2017</fecha_inicio>
+      <fecha_fin>11-2018</fecha_fin>
+    </experiencia>
+  </experiencia_laboral>
+  <datos_adicionales>
+    <aficiones>Leer, Viajar, Escuchar música</aficiones>
+    <disponibilidad_para_viajar>Si</disponibilidad_para_viajar>
+  </datos_adicionales>
+</curriculum>
